@@ -78,6 +78,10 @@ const reviewUpdateValidator = [
     .withMessage("feedback cannot exceed 3000 characters"),
 ];
 
+const replaceAttachmentValidator = [
+  param("id").isMongoId().withMessage("Invalid update id"),
+];
+
 const createMilestoneValidator = [
   body("projectId").isMongoId().withMessage("projectId must be a valid id"),
   body("title").trim().notEmpty().withMessage("title is required"),
@@ -150,6 +154,7 @@ module.exports = {
   createUpdateValidator,
   getProjectUpdatesValidator,
   reviewUpdateValidator,
+  replaceAttachmentValidator,
   createMilestoneValidator,
   getMilestonesByProjectValidator,
   updateMilestoneStatusValidator,

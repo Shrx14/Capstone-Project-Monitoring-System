@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator");
 const {
   registerValidator,
   createUpdateValidator,
+  replaceAttachmentValidator,
   createMilestoneValidator,
   getUsersValidator,
 } = require("../middleware/requestValidators");
@@ -60,6 +61,19 @@ test("createUpdateValidator requires text or content", async () => {
 
   const errors = await runValidations(req, createUpdateValidator);
   assert.ok(errors.some((error) => error.path === "text"));
+});
+
+test("replaceAttachmentValidator rejects invalid update id", async () => {
+  const req = {
+    body: {},
+    params: {
+      id: "invalid-id",
+    },
+    query: {},
+  };
+
+  const errors = await runValidations(req, replaceAttachmentValidator);
+  assert.ok(errors.some((error) => error.path === "id"));
 });
 
 test("createMilestoneValidator rejects past dueDate", async () => {

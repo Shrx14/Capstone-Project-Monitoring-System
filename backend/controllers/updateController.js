@@ -44,6 +44,16 @@ const getCloudinaryResourceType = (mimeType = "") => {
   return "raw";
 };
 
+const getResourceTypeFromPublicId = (publicId = "") => {
+  const extension = path.extname(publicId).replace(".", "").toLowerCase();
+
+  if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
+    return "image";
+  }
+
+  return "raw";
+};
+
 const getSignedDownloadUrl = (filePublicId) => {
   if (!filePublicId) {
     return null;
@@ -94,6 +104,18 @@ const uploadToCloudinary = (fileBuffer, folder, originalName, mimeType) => {
     );
 
     uploadStream.end(fileBuffer);
+  });
+};
+
+const deleteFromCloudinary = async (filePublicId) => {
+  if (!filePublicId) {
+    return;
+  }
+
+  const resourceType = getResourceTypeFromPublicId(filePublicId);
+  await cloudinary.uploader.destroy(filePublicId, {
+    resource_type: resourceType,
+    type: "upload",
   });
 };
 
@@ -252,8 +274,80 @@ const reviewUpdate = async (req, res) => {
   }
 };
 
+const replaceAttachment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ success: false, message: "Invalid update id" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "file is required" });
+    }
+
+    const update = await Update.findById(id);
+
+    if (!update) {
+      return res.status(404).json({ success: false, message: "Update not found" });
+    }
+
+    if (String(update.submittedBy) !== req.user.userId) {
+      return res.status(403).json({ success: false, message: "Access denied" });
+    }
+
+    if (update.status !== "pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Attachment can only be replaced for pending updates",
+      });
+    }
+
+    let uploadResult;
+
+    try {
+      uploadResult = await uploadToCloudinary(
+        req.file.buffer,
+        "capstone-updates",
+        req.file.originalname,
+        req.file.mimetype
+      );
+    } catch {
+      return res.status(502).json({
+        success: false,
+        message: "File upload failed. Please try again.",
+      });
+    }
+
+    const previousFilePublicId = update.filePublicId;
+
+    update.fileUrl = uploadResult.secure_url;
+    update.filePublicId = uploadResult.public_id;
+
+    await update.save();
+
+    if (previousFilePublicId) {
+      try {
+        await deleteFromCloudinary(previousFilePublicId);
+      } catch {
+        // Ignore cleanup failures to avoid failing user-visible update replacement.
+      }
+    }
+
+    const data = update.toObject();
+    if (data.filePublicId) {
+      data.fileAccessUrl = getSignedDownloadUrl(data.filePublicId) || data.fileUrl;
+    }
+
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   createUpdate,
   getUpdatesByProject,
   reviewUpdate,
+  replaceAttachment,
 };

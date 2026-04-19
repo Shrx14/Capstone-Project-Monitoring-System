@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext'
 import ProjectForm from '../../components/student/ProjectForm'
 import UpdateForm from '../../components/student/UpdateForm'
 import MilestoneForm from '../../components/student/MilestoneForm'
+import ReplaceAttachmentForm from '../../components/student/ReplaceAttachmentForm'
 
 function StatusBadge({ status }) {
   const colors = {
@@ -46,6 +47,7 @@ function StudentDashboard() {
   const [announcements, setAnnouncements] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeModal, setActiveModal] = useState(null)
+  const [replaceTargetUpdate, setReplaceTargetUpdate] = useState(null)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -73,7 +75,10 @@ function StudentDashboard() {
     fetchData()
   }, [fetchData])
 
-  const handleModalClose = () => setActiveModal(null)
+  const handleModalClose = () => {
+    setActiveModal(null)
+    setReplaceTargetUpdate(null)
+  }
   const handleSuccess = () => {
     setActiveModal(null)
     fetchData()
@@ -188,6 +193,15 @@ function StudentDashboard() {
                           View Attachment
                         </a>
                       )}
+                      {u.status === 'pending' && (u.fileAccessUrl || u.fileUrl) && (
+                        <button
+                          type="button"
+                          onClick={() => setReplaceTargetUpdate(u)}
+                          className="mt-2 rounded-lg border border-white/20 px-2.5 py-1 text-xs font-semibold text-white hover:bg-white/10 transition"
+                        >
+                          Replace Attachment
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -230,6 +244,15 @@ function StudentDashboard() {
       {activeModal === 'milestone' && project && (
         <Modal onClose={handleModalClose}>
           <MilestoneForm projectId={project._id} onClose={handleModalClose} onSuccess={handleSuccess} />
+        </Modal>
+      )}
+      {replaceTargetUpdate && (
+        <Modal onClose={handleModalClose}>
+          <ReplaceAttachmentForm
+            updateId={replaceTargetUpdate._id}
+            onClose={handleModalClose}
+            onSuccess={handleSuccess}
+          />
         </Modal>
       )}
     </div>

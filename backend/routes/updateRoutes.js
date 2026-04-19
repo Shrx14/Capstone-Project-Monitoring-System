@@ -7,11 +7,13 @@ const {
   createUpdateValidator,
   getProjectUpdatesValidator,
   reviewUpdateValidator,
+  replaceAttachmentValidator,
 } = require("../middleware/requestValidators");
 const {
   createUpdate,
   getUpdatesByProject,
   reviewUpdate,
+  replaceAttachment,
 } = require("../controllers/updateController");
 
 const router = express.Router();
@@ -32,6 +34,15 @@ router.get(
   getProjectUpdatesValidator,
   validateRequest,
   getUpdatesByProject
+);
+router.patch(
+  "/:id/attachment",
+  authMiddleware,
+  allowRoles("student"),
+  upload.single("file"),
+  replaceAttachmentValidator,
+  validateRequest,
+  replaceAttachment
 );
 router.patch(
   "/:id/review",
