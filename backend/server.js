@@ -7,6 +7,10 @@ dotenv.config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const projectRoutes = require("./routes/projectRoutes");
+const updateRoutes = require("./routes/updateRoutes");
+const milestoneRoutes = require("./routes/milestoneRoutes");
+const announcementRoutes = require("./routes/announcementRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +24,10 @@ app.get("/api/v1/health", (req, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/updates", updateRoutes);
+app.use("/api/v1/milestones", milestoneRoutes);
+app.use("/api/v1/announcements", announcementRoutes);
 
 const startServer = async () => {
   try {
