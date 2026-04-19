@@ -1,10 +1,12 @@
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const User = require("../models/User");
+const validateRequest = require("../middleware/validationMiddleware");
+const { getUsersValidator } = require("../middleware/requestValidators");
 
 const router = express.Router();
 
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, getUsersValidator, validateRequest, async (req, res) => {
   try {
     const { role } = req.query;
     const filter = role ? { role } : {};

@@ -1,0 +1,466 @@
+{
+  "info": {
+    "_postman_id": "0f5d6f58-6f5b-4f26-9f7d-6a5f8f9cc001",
+    "name": "Capstone Monitoring System API",
+    "description": "Full API collection for Capstone Project Monitoring System backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "apiPrefix", "value": "/api/v1" },
+    { "key": "token", "value": "" },
+    { "key": "mentorId", "value": "" },
+    { "key": "projectId", "value": "" },
+    { "key": "updateId", "value": "" },
+    { "key": "milestoneId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Student One\",\n  \"email\": \"student@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"student\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Login (Stores Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Users By Role (Mentor)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.data && json.data.length > 0 && json.data[0]._id) {",
+                  "    pm.collectionVariables.set('mentorId', json.data[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/users?role=mentor",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "users"],
+              "query": [
+                { "key": "role", "value": "mentor" }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "POST Create Project (Student)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.data && json.data._id) {",
+                  "    pm.collectionVariables.set('projectId', json.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Capstone Project\",\n  \"description\": \"Project description\",\n  \"groupMembers\": [\"Member A\", \"Member B\"],\n  \"mentorId\": \"{{mentorId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET My Projects (Student)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects", "my"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Assigned Projects (Mentor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects/assigned",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects", "assigned"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET All Projects (Coordinator)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Project Stats (Coordinator)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Project Status (Coordinator)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/projects/{{projectId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "projects", "{{projectId}}", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Updates",
+      "item": [
+        {
+          "name": "POST Create Update (Student, Multipart)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.data && json.data._id) {",
+                  "    pm.collectionVariables.set('updateId', json.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "projectId", "value": "{{projectId}}", "type": "text" },
+                { "key": "text", "value": "Weekly update details", "type": "text" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/updates",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "updates"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Updates By Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/updates/project/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "updates", "project", "{{projectId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Review Update (Mentor)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\",\n  \"feedback\": \"Good work\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/updates/{{updateId}}/review",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "updates", "{{updateId}}", "review"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Milestones",
+      "item": [
+        {
+          "name": "POST Create Milestone (Student)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.data && json.data._id) {",
+                  "    pm.collectionVariables.set('milestoneId', json.data._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"projectId\": \"{{projectId}}\",\n  \"title\": \"Milestone 1\",\n  \"description\": \"First milestone description\",\n  \"dueDate\": \"2026-12-31\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/milestones",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "milestones"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Milestones By Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/milestones/project/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "milestones", "project", "{{projectId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Milestone Status (Student)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/milestones/{{milestoneId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "milestones", "{{milestoneId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Announcements",
+      "item": [
+        {
+          "name": "POST Create Announcement (Coordinator)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Submission deadline is Friday\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/announcements",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "announcements"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Announcements",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPrefix}}/announcements",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "announcements"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
