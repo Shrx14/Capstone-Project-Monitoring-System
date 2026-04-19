@@ -178,9 +178,9 @@ function StudentDashboard() {
                           <span className="font-medium text-neutral-400">Feedback:</span> {u.feedback}
                         </p>
                       )}
-                      {u.fileUrl && (
+                      {(u.fileAccessUrl || u.fileUrl) && (
                         <a
-                          href={u.fileUrl}
+                          href={u.fileAccessUrl || u.fileUrl}
                           target="_blank"
                           rel="noreferrer"
                           className="mt-1 block text-xs text-blue-400 hover:underline"

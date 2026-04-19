@@ -58,8 +58,8 @@ function ReviewUpdate({ updates, onReviewComplete }) {
 
           <p className="mb-2 max-h-32 overflow-y-auto text-sm text-neutral-300">{u.text}</p>
 
-          {u.fileUrl && (
-            <a href={u.fileUrl} target="_blank" rel="noreferrer" className="mb-2 block text-xs font-medium text-blue-400 hover:underline">
+          {(u.fileAccessUrl || u.fileUrl) && (
+            <a href={u.fileAccessUrl || u.fileUrl} target="_blank" rel="noreferrer" className="mb-2 block text-xs font-medium text-blue-400 hover:underline">
               📎 View Attachment
             </a>
           )}

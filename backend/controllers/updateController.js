@@ -1,14 +1,89 @@
 const mongoose = require("mongoose");
+const path = require("path");
 const Project = require("../models/Project");
 const Update = require("../models/Update");
 const cloudinary = require("../utils/cloudinary");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-const uploadToCloudinary = (fileBuffer, folder) => {
+const extensionByMimeType = {
+  "application/pdf": "pdf",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+  "application/vnd.ms-powerpoint": "ppt",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+  "image/jpeg": "jpg",
+  "image/jpg": "jpg",
+  "image/png": "png",
+};
+
+const getSafePublicId = (originalName = "upload") => {
+  const baseName = path.parse(originalName).name;
+  const sanitizedBase = baseName
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-zA-Z0-9-_]/g, "");
+
+  return `${Date.now()}-${sanitizedBase || "upload"}`;
+};
+
+const getFileExtension = (originalName = "", mimeType = "") => {
+  const extFromName = path.extname(originalName).replace(".", "").toLowerCase();
+  if (extFromName) {
+    return extFromName;
+  }
+
+  return extensionByMimeType[mimeType] || "";
+};
+
+const getCloudinaryResourceType = (mimeType = "") => {
+  if (mimeType.startsWith("image/")) {
+    return "image";
+  }
+
+  return "raw";
+};
+
+const getSignedDownloadUrl = (filePublicId) => {
+  if (!filePublicId) {
+    return null;
+  }
+
+  try {
+    const expiresAt = Math.floor(Date.now() / 1000) + 60 * 60;
+
+    return cloudinary.utils.private_download_url(filePublicId, undefined, {
+      resource_type: "raw",
+      type: "upload",
+      expires_at: expiresAt,
+      attachment: false,
+    });
+  } catch {
+    return null;
+  }
+};
+
+const uploadToCloudinary = (fileBuffer, folder, originalName, mimeType) => {
+  const fileExtension = getFileExtension(originalName, mimeType);
+  const publicIdBase = getSafePublicId(originalName);
+  const resourceType = getCloudinaryResourceType(mimeType);
+
+  const uploadOptions = {
+    folder,
+    resource_type: resourceType,
+    public_id:
+      resourceType === "raw" && fileExtension
+        ? `${publicIdBase}.${fileExtension}`
+        : publicIdBase,
+  };
+
+  if (resourceType === "image" && fileExtension) {
+    uploadOptions.format = fileExtension;
+  }
+
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder, resource_type: "auto" },
+      uploadOptions,
       (error, result) => {
         if (error) {
           return reject(error);
@@ -64,7 +139,12 @@ const createUpdate = async (req, res) => {
 
     if (req.file) {
       try {
-        const uploadResult = await uploadToCloudinary(req.file.buffer, "capstone-updates");
+        const uploadResult = await uploadToCloudinary(
+          req.file.buffer,
+          "capstone-updates",
+          req.file.originalname,
+          req.file.mimetype
+        );
         fileUrl = uploadResult.secure_url;
         filePublicId = uploadResult.public_id;
       } catch {
@@ -112,7 +192,17 @@ const getUpdatesByProject = async (req, res) => {
       .populate("reviewedBy", "name email role")
       .sort({ createdAt: -1 });
 
-    return res.status(200).json({ success: true, data: updates });
+    const serializedUpdates = updates.map((update) => {
+      const data = update.toObject();
+
+      if (data.filePublicId) {
+        data.fileAccessUrl = getSignedDownloadUrl(data.filePublicId) || data.fileUrl;
+      }
+
+      return data;
+    });
+
+    return res.status(200).json({ success: true, data: serializedUpdates });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
