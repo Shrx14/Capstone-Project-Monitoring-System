@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { EtheralShadow } from '@/components/ui/EtheralShadow'
 import KineticTeamHybrid from '@/components/ui/KineticTeamHybrid'
 import collegeLogo from '../assets/college logo.png'
@@ -111,7 +112,12 @@ function AboutPage() {
         </nav>
 
         {/* About Section */}
-        <div className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12"
+        >
           <div className="mb-16 max-w-3xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
               About the Project
@@ -123,7 +129,7 @@ function AboutPage() {
               The Capstone Project Monitoring System is an intelligent web application designed to modernize the way academic projects are managed and tracked. It provides a structured ecosystem where students can submit milestones, mentors can review and guide progress, and coordinators can oversee all projects through a centralized dashboard. With features like role-based access control, secure authentication, real-time updates, and file management, the system eliminates inefficiencies of manual tracking and enhances transparency, accountability, and collaboration across all stakeholders.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Team Section */}
         <KineticTeamHybrid
@@ -132,8 +138,13 @@ function AboutPage() {
           subtitle="FSDL Internal Hackathon"
         />
 
-        {/* About Section */}
-        <div className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12">
+        {/* Academic Attribution Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12"
+        >
           <div className="mb-16 max-w-3xl">
             <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
               Academic Attribution
@@ -142,7 +153,7 @@ function AboutPage() {
               This project was developed as part of the Full Stack Development Laboratory course at Fr. C. Rodrigues Institute of Technology, Vashi, Navi Mumbai, Department of Computer Engineering.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Footer */}
         <footer className="py-8 text-center text-xs text-neutral-600">
