@@ -26,6 +26,11 @@ const createProject = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid mentorId" });
     }
 
+    const mentor = await User.findOne({ _id: mentorId, role: "mentor" }).select("_id");
+    if (!mentor) {
+      return res.status(400).json({ success: false, message: "mentorId must belong to a mentor" });
+    }
+
     let resolvedCoordinatorId = coordinatorId;
 
     if (!resolvedCoordinatorId) {
@@ -39,6 +44,14 @@ const createProject = async (req, res) => {
       }
 
       resolvedCoordinatorId = coordinator._id;
+    } else {
+      const coordinator = await User.findOne({ _id: resolvedCoordinatorId, role: "coordinator" }).select("_id");
+      if (!coordinator) {
+        return res.status(400).json({
+          success: false,
+          message: "coordinatorId must belong to a coordinator",
+        });
+      }
     }
 
     const project = await Project.create({

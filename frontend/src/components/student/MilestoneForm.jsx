@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import axiosInstance from '../../axiosInstance'
 
-function MilestoneForm({ projectId, onClose, onSuccess }) {
+function MilestoneForm({ projectId, onClose }) {
   const [milestones, setMilestones] = useState([])
   const [loadingMilestones, setLoadingMilestones] = useState(true)
   const {

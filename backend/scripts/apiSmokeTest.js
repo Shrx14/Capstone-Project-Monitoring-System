@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const fs = require("fs");
 const path = require("path");
 
@@ -38,7 +37,7 @@ const request = async (method, endpoint, { token, body, isFormData = false } = {
   try {
     json = JSON.parse(text);
   } catch (error) {
-    throw new Error(`Non-JSON response for ${method} ${endpoint}: ${text}`);
+    throw new Error(`Non-JSON response for ${method} ${endpoint}: ${text}`, { cause: error });
   }
 
   return { status: res.status, json };

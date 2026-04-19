@@ -36,13 +36,17 @@ const configureMongoSrvDns = () => {
   try {
     dns.setServers(serversToUse);
     console.log(`Using DNS servers for MongoDB SRV lookup: ${serversToUse.join(", ")}`);
-  } catch (error) {
+  } catch {
     console.warn("Could not set custom DNS servers for MongoDB SRV lookup.");
   }
 };
 
 const connectDB = async () => {
   try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is not configured");
+    }
+
     configureMongoSrvDns();
     const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);

@@ -12,6 +12,8 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
     formState: { errors, isSubmitting },
   } = useForm()
 
+  const fileField = register('file')
+
   const onSubmit = async (data) => {
     try {
       const formData = new FormData()
@@ -20,7 +22,6 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
       if (data.file?.[0]) formData.append('file', data.file[0])
 
       await axiosInstance.post('/updates', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => {
           if (e.total) setUploadProgress(Math.round((e.loaded / e.total) * 100))
         },
@@ -55,8 +56,11 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
             <input
               type="file"
               accept=".pdf,.docx,.png,.jpg,.jpeg"
-              {...register('file')}
-              onChange={(e) => setSelectedFileName(e.target.files?.[0]?.name || '')}
+              {...fileField}
+              onChange={(e) => {
+                fileField.onChange(e)
+                setSelectedFileName(e.target.files?.[0]?.name || '')
+              }}
               className="hidden"
               id="file-upload"
             />

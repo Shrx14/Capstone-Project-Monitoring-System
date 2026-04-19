@@ -36,7 +36,7 @@ const canAccessProject = (project, user) => {
 const createUpdate = async (req, res) => {
   try {
     const { projectId, text, content } = req.body;
-    const normalizedText = text || content;
+    const normalizedText = (text || content || "").trim();
 
     if (!projectId || !normalizedText) {
       return res.status(400).json({
@@ -63,9 +63,16 @@ const createUpdate = async (req, res) => {
     let filePublicId = null;
 
     if (req.file) {
-      const uploadResult = await uploadToCloudinary(req.file.buffer, "capstone-updates");
-      fileUrl = uploadResult.secure_url;
-      filePublicId = uploadResult.public_id;
+      try {
+        const uploadResult = await uploadToCloudinary(req.file.buffer, "capstone-updates");
+        fileUrl = uploadResult.secure_url;
+        filePublicId = uploadResult.public_id;
+      } catch {
+        return res.status(502).json({
+          success: false,
+          message: "File upload failed. Please try again.",
+        });
+      }
     }
 
     const update = await Update.create({
@@ -115,6 +122,7 @@ const reviewUpdate = async (req, res) => {
   try {
     const { id } = req.params;
     const { status, feedback = "" } = req.body;
+    const normalizedFeedback = feedback.trim();
 
     if (!isValidObjectId(id)) {
       return res.status(400).json({ success: false, message: "Invalid update id" });
@@ -134,8 +142,15 @@ const reviewUpdate = async (req, res) => {
       return res.status(403).json({ success: false, message: "Access denied" });
     }
 
+    if (update.status !== "pending") {
+      return res.status(400).json({
+        success: false,
+        message: "Update has already been reviewed",
+      });
+    }
+
     update.status = status;
-    update.feedback = feedback;
+    update.feedback = normalizedFeedback;
     update.reviewedBy = req.user.userId;
     update.reviewedAt = new Date();
 
