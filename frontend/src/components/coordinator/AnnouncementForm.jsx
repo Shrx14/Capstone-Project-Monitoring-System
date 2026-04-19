@@ -22,8 +22,8 @@ function AnnouncementForm({ announcements = [], onPosted }) {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <h3 className="mb-3 text-base font-semibold text-blue-900">Post Announcement</h3>
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+      <h3 className="mb-3 text-base font-semibold text-white">Post Announcement</h3>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <textarea
           {...register('message', {
@@ -31,14 +31,14 @@ function AnnouncementForm({ announcements = [], onPosted }) {
             maxLength: { value: 2000, message: 'Max 2000 characters' },
           })}
           rows={3}
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-900"
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 outline-none focus:border-white/30 focus:ring-2 focus:ring-white/20"
           placeholder="Type your announcement..."
         />
-        {errors.message && <p className="text-xs text-red-600">{errors.message.message}</p>}
+        {errors.message && <p className="text-xs text-red-400">{errors.message.message}</p>}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-blue-900 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
+          className="w-full rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 disabled:opacity-60 transition"
         >
           {isSubmitting ? 'Posting...' : 'Post Announcement'}
         </button>
@@ -46,11 +46,11 @@ function AnnouncementForm({ announcements = [], onPosted }) {
 
       {announcements.length > 0 && (
         <div className="mt-4 space-y-2">
-          <h4 className="text-xs font-semibold uppercase text-slate-400 tracking-wide">Recent</h4>
+          <h4 className="text-xs font-semibold uppercase text-neutral-500 tracking-wide">Recent</h4>
           {announcements.slice(0, 10).map((a) => (
-            <div key={a._id} className="border-b border-slate-100 pb-2 last:border-0">
-              <p className="text-sm text-slate-700">{a.message}</p>
-              <p className="mt-0.5 text-xs text-slate-400">
+            <div key={a._id} className="border-b border-white/5 pb-2 last:border-0">
+              <p className="text-sm text-neutral-300">{a.message}</p>
+              <p className="mt-0.5 text-xs text-neutral-500">
                 {new Date(a.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} · {a.createdBy?.name}
               </p>
             </div>

@@ -6,12 +6,12 @@ import ReviewUpdate from '../../components/mentor/ReviewUpdate'
 
 function StatusBadge({ status }) {
   const colors = {
-    not_started: 'bg-gray-100 text-gray-700',
-    in_progress: 'bg-blue-100 text-blue-700',
-    completed: 'bg-green-100 text-green-700',
+    not_started: 'bg-neutral-700 text-neutral-300',
+    in_progress: 'bg-blue-500/20 text-blue-300',
+    completed: 'bg-emerald-500/20 text-emerald-300',
   }
   return (
-    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${colors[status] || 'bg-gray-100 text-gray-700'}`}>
+    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${colors[status] || 'bg-neutral-700 text-neutral-300'}`}>
       {status?.replace('_', ' ')}
     </span>
   )
@@ -65,7 +65,7 @@ function MentorDashboard() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-900 border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-white border-t-transparent" />
       </div>
     )
   }
@@ -73,17 +73,17 @@ function MentorDashboard() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-900">Mentor Dashboard</h2>
-        <p className="text-sm text-slate-500">Welcome, {user?.name}</p>
+        <h2 className="text-2xl font-bold text-white">Mentor Dashboard</h2>
+        <p className="text-sm text-neutral-400">Welcome, {user?.name}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Project List */}
         <div className="lg:col-span-1">
-          <h3 className="mb-3 text-base font-semibold text-slate-700">Assigned Projects ({projects.length})</h3>
+          <h3 className="mb-3 text-base font-semibold text-neutral-300">Assigned Projects ({projects.length})</h3>
           {projects.length === 0 ? (
-            <div className="rounded-xl border border-slate-200 bg-white p-6 text-center">
-              <p className="text-sm text-slate-500">No projects assigned yet.</p>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
+              <p className="text-sm text-neutral-500">No projects assigned yet.</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -92,17 +92,17 @@ function MentorDashboard() {
                   key={p._id}
                   type="button"
                   onClick={() => handleSelectProject(p)}
-                  className={`w-full rounded-xl border p-4 text-left transition hover:shadow-md ${
+                  className={`w-full rounded-2xl border p-4 text-left transition hover:shadow-lg ${
                     selectedProject?._id === p._id
-                      ? 'border-blue-900 bg-blue-50'
-                      : 'border-slate-200 bg-white'
-                  }`}
+                      ? 'border-white/30 bg-white/10'
+                      : 'border-white/10 bg-white/5 hover:bg-white/8'
+                  } backdrop-blur-sm`}
                 >
                   <div className="mb-1 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-800 truncate pr-2">{p.title}</p>
+                    <p className="text-sm font-semibold text-neutral-100 truncate pr-2">{p.title}</p>
                     <StatusBadge status={p.status} />
                   </div>
-                  <p className="text-xs text-slate-500">{p.groupMembers?.length} member(s)</p>
+                  <p className="text-xs text-neutral-500">{p.groupMembers?.length} member(s)</p>
                 </button>
               ))}
             </div>
@@ -112,43 +112,43 @@ function MentorDashboard() {
         {/* Project Detail */}
         <div className="lg:col-span-2">
           {!selectedProject ? (
-            <div className="flex h-48 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white">
-              <p className="text-sm text-slate-400">← Select a project to review</p>
+            <div className="flex h-48 items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/5 backdrop-blur-sm">
+              <p className="text-sm text-neutral-500">← Select a project to review</p>
             </div>
           ) : loadingDetails ? (
-            <div className="flex h-48 items-center justify-center rounded-xl border border-slate-200 bg-white">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-900 border-t-transparent" />
+            <div className="flex h-48 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent" />
             </div>
           ) : (
             <div className="space-y-4">
               {/* Project Info */}
-              <div className="rounded-xl border border-slate-200 bg-white p-5">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
                 <div className="mb-2 flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-blue-900">{selectedProject.title}</h3>
+                  <h3 className="text-lg font-bold text-white">{selectedProject.title}</h3>
                   <StatusBadge status={selectedProject.status} />
                 </div>
-                <p className="mb-3 text-sm text-slate-600">{selectedProject.description}</p>
-                <p className="text-xs text-slate-500">
-                  <span className="font-medium">Group:</span> {selectedProject.groupMembers?.join(', ')}
+                <p className="mb-3 text-sm text-neutral-400">{selectedProject.description}</p>
+                <p className="text-xs text-neutral-500">
+                  <span className="font-medium text-neutral-300">Group:</span> {selectedProject.groupMembers?.join(', ')}
                 </p>
               </div>
 
               {/* Milestones */}
-              <div className="rounded-xl border border-slate-200 bg-white p-5">
-                <h4 className="mb-3 text-base font-semibold text-slate-700">Milestones</h4>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+                <h4 className="mb-3 text-base font-semibold text-neutral-200">Milestones</h4>
                 {milestones.length === 0 ? (
-                  <p className="text-sm text-slate-500">No milestones set.</p>
+                  <p className="text-sm text-neutral-500">No milestones set.</p>
                 ) : (
                   <div className="space-y-2">
                     {milestones.map((m) => (
-                      <div key={m._id} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                      <div key={m._id} className="flex items-center justify-between rounded-xl bg-white/5 px-3  py-2">
                         <div>
-                          <p className="text-sm text-slate-800">{m.title}</p>
-                          <p className="text-xs text-slate-400">
+                          <p className="text-sm text-neutral-200">{m.title}</p>
+                          <p className="text-xs text-neutral-500">
                             Due: {new Date(m.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                           </p>
                         </div>
-                        <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${m.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                        <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${m.status === 'completed' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-yellow-500/20 text-yellow-300'}`}>
                           {m.status}
                         </span>
                       </div>
@@ -158,8 +158,8 @@ function MentorDashboard() {
               </div>
 
               {/* Updates */}
-              <div className="rounded-xl border border-slate-200 bg-white p-5">
-                <h4 className="mb-3 text-base font-semibold text-slate-700">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+                <h4 className="mb-3 text-base font-semibold text-neutral-200">
                   Progress Updates ({updates.length})
                 </h4>
                 <ReviewUpdate updates={updates} onReviewComplete={handleReviewComplete} />

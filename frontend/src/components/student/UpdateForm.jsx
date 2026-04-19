@@ -6,7 +6,6 @@ import axiosInstance from '../../axiosInstance'
 function UpdateForm({ projectId, onClose, onSuccess }) {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [selectedFileName, setSelectedFileName] = useState('')
-
   const {
     register,
     handleSubmit,
@@ -18,10 +17,7 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
       const formData = new FormData()
       formData.append('projectId', projectId)
       formData.append('text', data.text)
-
-      if (data.file?.[0]) {
-        formData.append('file', data.file[0])
-      }
+      if (data.file?.[0]) formData.append('file', data.file[0])
 
       await axiosInstance.post('/updates', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -29,7 +25,6 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
           if (e.total) setUploadProgress(Math.round((e.loaded / e.total) * 100))
         },
       })
-
       toast.success('Update submitted successfully!')
       onSuccess()
     } catch (err) {
@@ -39,27 +34,24 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold text-blue-900">Submit Progress Update</h2>
+      <h2 className="mb-4 text-xl font-bold text-white">Submit Progress Update</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700">Progress Description</label>
+          <label className="mb-1 block text-sm font-medium text-neutral-300">Progress Description</label>
           <textarea
-            {...register('text', {
-              required: 'Description is required',
-              maxLength: { value: 3000, message: 'Max 3000 characters' },
-            })}
+            {...register('text', { required: 'Description is required', maxLength: { value: 3000, message: 'Max 3000 characters' } })}
             rows={5}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-900 focus:ring-2 focus:ring-blue-900"
+            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder-neutral-500 outline-none focus:border-white/30 focus:ring-2 focus:ring-white/20"
             placeholder="Describe your progress this week..."
           />
-          {errors.text && <p className="mt-1 text-xs text-red-600">{errors.text.message}</p>}
+          {errors.text && <p className="mt-1 text-xs text-red-400">{errors.text.message}</p>}
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700">
-            Attachment <span className="text-slate-400">(optional — PDF, DOCX, PNG, JPG · max 10MB)</span>
+          <label className="mb-1 block text-sm font-medium text-neutral-300">
+            Attachment <span className="text-neutral-500">(optional — PDF, DOCX, PNG, JPG · max 10MB)</span>
           </label>
-          <div className="rounded-lg border-2 border-dashed border-slate-300 p-4 text-center">
+          <div className="rounded-xl border-2 border-dashed border-white/15 p-4 text-center hover:border-white/30 transition">
             <input
               type="file"
               accept=".pdf,.docx,.png,.jpg,.jpeg"
@@ -69,38 +61,27 @@ function UpdateForm({ projectId, onClose, onSuccess }) {
               id="file-upload"
             />
             <label htmlFor="file-upload" className="cursor-pointer">
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-neutral-500">
                 {selectedFileName ? (
-                  <span className="font-medium text-blue-900">{selectedFileName}</span>
+                  <span className="font-medium text-white">{selectedFileName}</span>
                 ) : (
-                  <>Click to select a file or drag and drop</>
+                  <>Click to select a file</>
                 )}
               </p>
             </label>
           </div>
           {uploadProgress > 0 && uploadProgress < 100 && (
-            <div className="mt-2 h-2 rounded-full bg-slate-200">
-              <div
-                className="h-2 rounded-full bg-blue-900 transition-all"
-                style={{ width: `${uploadProgress}%` }}
-              />
+            <div className="mt-2 h-2 rounded-full bg-neutral-800">
+              <div className="h-2 rounded-full bg-white transition-all" style={{ width: `${uploadProgress}%` }} />
             </div>
           )}
         </div>
 
         <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex-1 rounded-md bg-blue-900 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
-          >
+          <button type="submit" disabled={isSubmitting} className="flex-1 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 disabled:opacity-60 transition">
             {isSubmitting ? 'Submitting...' : 'Submit Update'}
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
-          >
+          <button type="button" onClick={onClose} className="rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-neutral-300 hover:bg-white/10 transition">
             Cancel
           </button>
         </div>

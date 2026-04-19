@@ -8,15 +8,15 @@ import MilestoneForm from '../../components/student/MilestoneForm'
 
 function StatusBadge({ status }) {
   const colors = {
-    not_started: 'bg-gray-100 text-gray-700',
-    in_progress: 'bg-blue-100 text-blue-700',
-    completed: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    approved: 'bg-green-100 text-green-700',
-    rejected: 'bg-red-100 text-red-700',
+    not_started: 'bg-neutral-700 text-neutral-300',
+    in_progress: 'bg-blue-500/20 text-blue-300',
+    completed: 'bg-emerald-500/20 text-emerald-300',
+    pending: 'bg-yellow-500/20 text-yellow-300',
+    approved: 'bg-emerald-500/20 text-emerald-300',
+    rejected: 'bg-red-500/20 text-red-300',
   }
   return (
-    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${colors[status] || 'bg-gray-100 text-gray-700'}`}>
+    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${colors[status] || 'bg-neutral-700 text-neutral-300'}`}>
       {status?.replace('_', ' ')}
     </span>
   )
@@ -24,12 +24,12 @@ function StatusBadge({ status }) {
 
 function Modal({ onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-neutral-900/90 p-6 shadow-2xl backdrop-blur-xl">
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 text-xl font-bold"
+          className="absolute right-4 top-4 text-neutral-500 hover:text-white text-xl font-bold transition"
         >
           ✕
         </button>
@@ -82,7 +82,7 @@ function StudentDashboard() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-900 border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-white border-t-transparent" />
       </div>
     )
   }
@@ -91,14 +91,14 @@ function StudentDashboard() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-blue-900">Welcome, {user?.name}</h2>
-          <p className="text-sm text-slate-500">Student Dashboard</p>
+          <h2 className="text-2xl font-bold text-white">Welcome, {user?.name}</h2>
+          <p className="text-sm text-neutral-400">Student Dashboard</p>
         </div>
         {!project && (
           <button
             type="button"
             onClick={() => setActiveModal('project')}
-            className="rounded-md bg-blue-900 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 transition"
           >
             + Create Project
           </button>
@@ -109,34 +109,34 @@ function StudentDashboard() {
         {/* Left Column */}
         <div className="space-y-6 lg:col-span-2">
           {/* Project Card */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 className="mb-3 text-lg font-semibold text-blue-900">My Project</h3>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-white">My Project</h3>
             {project ? (
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <h4 className="font-semibold text-slate-800">{project.title}</h4>
+                  <h4 className="font-semibold text-neutral-100">{project.title}</h4>
                   <StatusBadge status={project.status} />
                 </div>
-                <p className="mb-3 text-sm text-slate-600">{project.description}</p>
-                <p className="mb-1 text-xs text-slate-500">
-                  <span className="font-medium">Group Members:</span>{' '}
+                <p className="mb-3 text-sm text-neutral-400">{project.description}</p>
+                <p className="mb-1 text-xs text-neutral-500">
+                  <span className="font-medium text-neutral-300">Group Members:</span>{' '}
                   {project.groupMembers.join(', ')}
                 </p>
-                <p className="text-xs text-slate-500">
-                  <span className="font-medium">Mentor:</span> {project.mentorId?.name}
+                <p className="text-xs text-neutral-500">
+                  <span className="font-medium text-neutral-300">Mentor:</span> {project.mentorId?.name}
                 </p>
                 <div className="mt-4 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setActiveModal('update')}
-                    className="rounded-md bg-blue-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-800"
+                    className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:bg-neutral-200 transition"
                   >
                     Submit Update
                   </button>
                   <button
                     type="button"
                     onClick={() => setActiveModal('milestone')}
-                    className="rounded-md border border-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 hover:bg-blue-50"
+                    className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/10 transition"
                   >
                     Manage Milestones
                   </button>
@@ -144,11 +144,11 @@ function StudentDashboard() {
               </div>
             ) : (
               <div className="py-8 text-center">
-                <p className="text-slate-500">No project yet.</p>
+                <p className="text-neutral-500">No project yet.</p>
                 <button
                   type="button"
                   onClick={() => setActiveModal('project')}
-                  className="mt-3 rounded-md bg-blue-900 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800"
+                  className="mt-3 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 transition"
                 >
                   Create Your Project
                 </button>
@@ -158,24 +158,24 @@ function StudentDashboard() {
 
           {/* Updates */}
           {project && (
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3 text-lg font-semibold text-blue-900">Progress Updates</h3>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-sm">
+              <h3 className="mb-3 text-lg font-semibold text-white">Progress Updates</h3>
               {updates.length === 0 ? (
-                <p className="text-sm text-slate-500">No updates submitted yet.</p>
+                <p className="text-sm text-neutral-500">No updates submitted yet.</p>
               ) : (
                 <div className="space-y-3">
                   {updates.map((u) => (
-                    <div key={u._id} className="rounded-lg border border-slate-100 p-3">
+                    <div key={u._id} className="rounded-xl border border-white/5 bg-white/5 p-3">
                       <div className="mb-1 flex items-center justify-between">
                         <StatusBadge status={u.status} />
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-neutral-500">
                           {new Date(u.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="text-sm text-slate-700">{u.text}</p>
+                      <p className="text-sm text-neutral-300">{u.text}</p>
                       {u.feedback && (
-                        <p className="mt-1 text-xs text-slate-500">
-                          <span className="font-medium">Feedback:</span> {u.feedback}
+                        <p className="mt-1 text-xs text-neutral-500">
+                          <span className="font-medium text-neutral-400">Feedback:</span> {u.feedback}
                         </p>
                       )}
                       {u.fileUrl && (
@@ -183,7 +183,7 @@ function StudentDashboard() {
                           href={u.fileUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="mt-1 block text-xs text-blue-600 hover:underline"
+                          className="mt-1 block text-xs text-blue-400 hover:underline"
                         >
                           View Attachment
                         </a>
@@ -197,16 +197,16 @@ function StudentDashboard() {
         </div>
 
         {/* Right Column — Announcements */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 text-lg font-semibold text-blue-900">Announcements</h3>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-sm">
+          <h3 className="mb-3 text-lg font-semibold text-white">Announcements</h3>
           {announcements.length === 0 ? (
-            <p className="text-sm text-slate-500">No announcements yet.</p>
+            <p className="text-sm text-neutral-500">No announcements yet.</p>
           ) : (
             <div className="space-y-3">
               {announcements.map((a) => (
-                <div key={a._id} className="border-b border-slate-100 pb-3 last:border-0">
-                  <p className="text-sm text-slate-700">{a.message}</p>
-                  <p className="mt-1 text-xs text-slate-400">
+                <div key={a._id} className="border-b border-white/5 pb-3 last:border-0">
+                  <p className="text-sm text-neutral-300">{a.message}</p>
+                  <p className="mt-1 text-xs text-neutral-500">
                     {new Date(a.date).toLocaleDateString()} · {a.createdBy?.name}
                   </p>
                 </div>

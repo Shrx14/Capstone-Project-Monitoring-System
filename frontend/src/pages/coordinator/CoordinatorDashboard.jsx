@@ -9,14 +9,14 @@ const FILTERS = ['all', 'not_started', 'in_progress', 'completed']
 
 function StatCard({ label, count, color }) {
   const colors = {
-    gray: 'bg-gray-50 border-gray-200 text-gray-700',
-    blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    green: 'bg-green-50 border-green-200 text-green-700',
+    gray: 'bg-white/5 border-white/10 text-neutral-300',
+    blue: 'bg-blue-500/10 border-blue-500/20 text-blue-300',
+    green: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300',
   }
   return (
-    <div className={`rounded-xl border p-5 ${colors[color]}`}>
+    <div className={`rounded-2xl border p-5 backdrop-blur-sm ${colors[color]}`}>
       <p className="text-3xl font-bold">{count}</p>
-      <p className="mt-1 text-sm font-medium capitalize">{label.replace('_', ' ')}</p>
+      <p className="mt-1 text-sm font-medium capitalize opacity-70">{label.replace('_', ' ')}</p>
     </div>
   )
 }
@@ -56,7 +56,7 @@ function CoordinatorDashboard() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-900 border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-white border-t-transparent" />
       </div>
     )
   }
@@ -64,8 +64,8 @@ function CoordinatorDashboard() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-900">Coordinator Dashboard</h2>
-        <p className="text-sm text-slate-500">Welcome, {user?.name}</p>
+        <h2 className="text-2xl font-bold text-white">Coordinator Dashboard</h2>
+        <p className="text-sm text-neutral-400">Welcome, {user?.name}</p>
       </div>
 
       {/* Stats */}
@@ -87,14 +87,14 @@ function CoordinatorDashboard() {
                 onClick={() => setActiveFilter(f)}
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold capitalize transition ${
                   activeFilter === f
-                    ? 'bg-blue-900 text-white'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'bg-white text-neutral-900'
+                    : 'bg-white/5 border border-white/10 text-neutral-400 hover:bg-white/10'
                 }`}
               >
                 {f.replace('_', ' ')}
               </button>
             ))}
-            <span className="ml-auto text-xs text-slate-400">{filteredProjects.length} project(s)</span>
+            <span className="ml-auto text-xs text-neutral-500">{filteredProjects.length} project(s)</span>
           </div>
           <AllProjects projects={filteredProjects} onStatusChange={fetchAll} />
         </div>
