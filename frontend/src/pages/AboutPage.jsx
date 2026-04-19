@@ -4,43 +4,62 @@ import KineticTeamHybrid from '@/components/ui/KineticTeamHybrid'
 import collegeLogo from '../assets/college logo.png'
 import { ArrowLeft } from 'lucide-react'
 
+/* ---------- Member Photos ---------- */
+import sumitPhoto from '../assets/sumit pawar.jpeg'
+import shreyasPhoto from '../assets/shreyas sawant.jpeg'
+import kaustubhPhoto from '../assets/kaustubh waje.jpeg'
+import anoojPhoto from '../assets/anooj shete.jpeg'
+import raghavPhoto from '../assets/raghav sharma.jpeg'
+
 /* ---------- Team Data ---------- */
 const TEAM = [
   {
     id: '01',
     name: 'Sumit Pawar',
+    rollNo: '1023227',
     role: 'Frontend (Components)',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop',
+    image: sumitPhoto,
+    imagePosition: 'center 20%',
   },
   {
     id: '02',
     name: 'Shreyas Sawant',
+    rollNo: '1023242',
     role: 'Backend (Authentication & API)',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000&auto=format&fit=crop',
+    image: shreyasPhoto,
+    imagePosition: 'center 20%',
   },
   {
     id: '03',
     name: 'Kaustubh Waje',
+    rollNo: '1023262',
     role: 'Frontend (UI/UX & Dashboard Animations)',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop',
+    image: kaustubhPhoto,
+    imagePosition: 'center 20%',
   },
   {
     id: '04',
     name: 'Anooj Shete',
+    rollNo: '1023250',
     role: 'Backend (File Handling & Core Logic)',
-    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop',
+    image: anoojPhoto,
+    imagePosition: 'center 20%',
   },
   {
     id: '05',
     name: 'Bethuel Shilesh',
+    rollNo: '1023251',
     role: 'DB Schema & Optimization',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop',
+    imagePosition: 'center center',
   },
   {
     id: '06',
     name: 'Raghav Sharma',
+    rollNo: '1023248',
     role: 'Integration & Deployment',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1000&auto=format&fit=crop',
+    image: raghavPhoto,
+    imagePosition: 'center center',
   },
 ]
 

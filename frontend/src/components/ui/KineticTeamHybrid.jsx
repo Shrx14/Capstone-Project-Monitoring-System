@@ -35,9 +35,16 @@ function TeamRow({ data, index, isActive, setActiveId, isMobile, isAnyActive }) 
           <span className="font-mono text-xs text-neutral-600">
             0{index + 1}
           </span>
-          <h2 className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
-            {data.name}
-          </h2>
+          <div className="flex flex-col">
+            <h2 className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
+              {data.name}
+            </h2>
+            {data.rollNo && (
+              <span className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-neutral-600 transition-colors group-hover:text-neutral-400">
+                {data.rollNo}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Role & Icon Section */}
@@ -77,6 +84,7 @@ function TeamRow({ data, index, isActive, setActiveId, isMobile, isAnyActive }) 
                   src={data.image}
                   alt={data.name}
                   className="h-full w-full object-cover"
+                  style={{ objectPosition: data.imagePosition || 'center center' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-4 left-4">
@@ -181,6 +189,7 @@ export default function KineticTeamHybrid({ team = [], title = 'Our Team', subti
                   src={team.find((t) => t.id === activeId)?.image}
                   alt="Preview"
                   className="h-full w-full object-cover"
+                  style={{ objectPosition: team.find((t) => t.id === activeId)?.imagePosition || 'center center' }}
                 />
 
                 {/* Overlay Metadata */}
