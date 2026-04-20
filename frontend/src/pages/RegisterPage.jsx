@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import axiosInstance from '../axiosInstance'
 import { useAuth } from '../context/AuthContext'
 import { EtheralShadow } from '@/components/ui/EtheralShadow'
@@ -47,7 +49,19 @@ function RegisterPage() {
         />
       </div>
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4">
-        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl"
+        >
+          <Link
+            to="/"
+            className="mb-6 inline-flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-white"
+          >
+            <ArrowLeft size={16} />
+            Home
+          </Link>
           <h1 className="mb-2 text-center text-2xl font-bold text-white">Register</h1>
           <p className="mb-6 text-center text-sm text-neutral-400">Create your Capstone Monitor account</p>
 
@@ -117,7 +131,7 @@ function RegisterPage() {
               Login
             </Link>
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
