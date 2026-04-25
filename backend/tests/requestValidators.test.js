@@ -24,7 +24,7 @@ test("registerValidator accepts valid payload", async () => {
       name: "Student One",
       email: "student@example.com",
       password: "password123",
-      role: "student",
+      role: "mentor",
     },
     params: {},
     query: {},

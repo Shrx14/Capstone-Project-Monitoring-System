@@ -34,6 +34,12 @@ function HomePage() {
               About Us
             </Link>
             <Link
+              to="/register-team"
+              className="rounded-lg border border-white/15 bg-white/5 px-5 py-2 text-sm font-medium text-neutral-200 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
+            >
+              Register Team
+            </Link>
+            <Link
               to="/login"
               className="rounded-lg border border-white/15 bg-white/5 px-5 py-2 text-sm font-medium text-neutral-200 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
             >
@@ -104,23 +110,23 @@ function HomePage() {
             <div className="group relative flex flex-col rounded-2xl border border-white/8 bg-white/[0.03] p-7 text-left backdrop-blur-sm transition-all duration-500 hover:border-white/20 hover:bg-white/[0.07] hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative z-10 flex flex-1 flex-col">
-                <h3 className="mb-4 text-base font-semibold text-white">For Students</h3>
+                <h3 className="mb-4 text-base font-semibold text-white">For Team Leaders</h3>
                 <ul className="space-y-2.5 text-sm leading-relaxed text-neutral-400">
                   <li className="flex items-start gap-2.5">
                     <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-500" />
-                    Submit & manage project proposals
+                    Register your team with auto-generated Team ID
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-500" />
-                    Track milestones & deadlines
+                    Await coordinator approval and mentor assignment
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-500" />
-                    Upload project files & documents
+                    View project schedule with tasks and deadlines
                   </li>
                   <li className="flex items-start gap-2.5">
                     <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-500" />
-                    View mentor feedback in real-time
+                    Submit task progress and member contributions
                   </li>
                 </ul>
               </div>

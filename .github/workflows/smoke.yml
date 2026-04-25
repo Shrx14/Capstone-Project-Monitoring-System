@@ -2,6 +2,12 @@ name: Backend Smoke Test
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - backend/**
+      - .github/workflows/smoke.yml
 
 jobs:
   smoke:
@@ -65,8 +71,23 @@ jobs:
           echo "Server failed health check in time"
           exit 1
 
-      - name: Run API smoke test
-        run: node scripts/apiSmokeTest.js
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run API smoke test (Postman Collection)
+        env:
+          NEWMAN_DISABLE_UNICODE: "1"
+        run: |
+          newman run postman/Capstone-Monitoring-System.postman_collection.json \
+            --folder "Health" \
+            --folder "Auth" \
+            --folder "Users" \
+            --folder "Teams" \
+            --folder "Schedules" \
+            --folder "Task Submissions" \
+            --folder "Announcements" \
+            --reporters cli \
+            --bail
 
       - name: Stop backend server
         if: always()

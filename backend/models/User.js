@@ -20,8 +20,16 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["student", "mentor", "coordinator"],
+    enum: ["mentor", "coordinator", "teamleader"],
     required: true,
+  },
+  rollNo: {
+    type: String,
+    trim: true,
+  },
+  branch: {
+    type: String,
+    trim: true,
   },
   createdAt: {
     type: Date,

@@ -3,15 +3,18 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
+import TeamLeaderRoute from './components/common/TeamLeaderRoute'
 import { EtheralShadow } from '@/components/ui/EtheralShadow'
 import { AuthProvider } from './context/AuthContext'
 import AboutPage from './pages/AboutPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import TeamRegisterPage from './pages/TeamRegisterPage'
+import PendingApprovalPage from './pages/PendingApprovalPage'
 import CoordinatorDashboard from './pages/coordinator/CoordinatorDashboard'
 import MentorDashboard from './pages/mentor/MentorDashboard'
-import StudentDashboard from './pages/student/StudentDashboard'
+import TeamLeaderDashboard from './pages/teamleader/TeamLeaderDashboard'
 
 function Layout() {
   return (
@@ -77,11 +80,13 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register-team" element={<TeamRegisterPage />} />
+          <Route path="/pending-approval" element={<PendingApprovalPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
           <Route element={<Layout />}>
-            <Route element={<ProtectedRoute allowedRoles={['student']} />}>
-              <Route path="/student/dashboard" element={<StudentDashboard />} />
+            <Route element={<TeamLeaderRoute />}>
+              <Route path="/teamleader/dashboard" element={<TeamLeaderDashboard />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedRoles={['mentor']} />}>

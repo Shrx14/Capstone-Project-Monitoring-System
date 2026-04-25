@@ -24,7 +24,7 @@ router.post(
 router.get(
   "/",
   authMiddleware,
-  allowRoles("student", "mentor", "coordinator"),
+  allowRoles("teamleader", "mentor", "coordinator"),
   getAnnouncementsValidator,
   validateRequest,
   getAnnouncements

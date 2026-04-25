@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import axiosInstance from '../axiosInstance'
 import { useAuth } from '../context/AuthContext'
@@ -9,9 +8,9 @@ import { EtheralShadow } from '@/components/ui/EtheralShadow'
 
 const getDashboardPath = (role) => {
   const dashboardByRole = {
-    student: '/student/dashboard',
     mentor: '/mentor/dashboard',
     coordinator: '/coordinator/dashboard',
+    teamleader: '/teamleader/dashboard',
   }
   return dashboardByRole[role] || '/login'
 }
@@ -28,8 +27,14 @@ function LoginPage() {
   const onSubmit = async (formData) => {
     try {
       const response = await axiosInstance.post('/auth/login', formData)
-      const { user, token } = response.data
-      login(user, token)
+      const { user, token, team } = response.data
+      login(user, token, team || null)
+
+      if (user?.role === 'teamleader' && (team?.status === 'pending' || team?.status === 'rejected')) {
+        navigate('/pending-approval')
+        return
+      }
+
       navigate(getDashboardPath(user?.role))
     } catch (error) {
       const message = error?.response?.data?.message || 'Login failed. Please try again.'
@@ -49,12 +54,7 @@ function LoginPage() {
         />
       </div>
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl"
-        >
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
           <Link
             to="/"
             className="mb-6 inline-flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-white"
@@ -109,7 +109,7 @@ function LoginPage() {
               Register
             </Link>
           </p>
-        </motion.div>
+        </div>
       </div>
     </div>
   )
