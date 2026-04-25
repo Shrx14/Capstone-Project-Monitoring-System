@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import axiosInstance from '../axiosInstance'
 import { useAuth } from '../context/AuthContext'
@@ -9,7 +8,6 @@ import { EtheralShadow } from '@/components/ui/EtheralShadow'
 
 const getDashboardPath = (role) => {
   const dashboardByRole = {
-    student: '/student/dashboard',
     mentor: '/mentor/dashboard',
     coordinator: '/coordinator/dashboard',
   }
@@ -23,7 +21,7 @@ function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: { name: '', email: '', password: '', role: 'student' } })
+  } = useForm({ defaultValues: { name: '', email: '', password: '', role: 'mentor' } })
 
   const onSubmit = async (formData) => {
     try {
@@ -49,12 +47,7 @@ function RegisterPage() {
         />
       </div>
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl"
-        >
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
           <Link
             to="/"
             className="mb-6 inline-flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-white"
@@ -109,7 +102,6 @@ function RegisterPage() {
                 {...register('role', { required: 'Role is required' })}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-white outline-none transition focus:border-white/30 focus:ring-2 focus:ring-white/20"
               >
-                <option value="student" className="bg-neutral-900">student</option>
                 <option value="mentor" className="bg-neutral-900">mentor</option>
                 <option value="coordinator" className="bg-neutral-900">coordinator</option>
               </select>
@@ -131,7 +123,14 @@ function RegisterPage() {
               Login
             </Link>
           </p>
-        </motion.div>
+          <p className="mt-2 text-center text-xs text-neutral-500">
+            To register a capstone project team, use the{' '}
+            <Link to="/register-team" className="font-semibold text-neutral-300 hover:underline">
+              Register Team page
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </div>
   )

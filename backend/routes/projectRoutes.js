@@ -8,7 +8,6 @@ const {
 } = require("../middleware/requestValidators");
 const {
   createProject,
-  getMyProjects,
   getAssignedProjects,
   getAllProjects,
   updateProjectStatus,
@@ -17,8 +16,7 @@ const {
 
 const router = express.Router();
 
-router.post("/", authMiddleware, allowRoles("student"), createProjectValidator, validateRequest, createProject);
-router.get("/my", authMiddleware, allowRoles("student"), getMyProjects);
+router.post("/", authMiddleware, allowRoles("coordinator"), createProjectValidator, validateRequest, createProject);
 router.get("/assigned", authMiddleware, allowRoles("mentor"), getAssignedProjects);
 router.get("/", authMiddleware, allowRoles("coordinator"), getAllProjects);
 router.get("/stats", authMiddleware, allowRoles("coordinator"), getProjectStats);

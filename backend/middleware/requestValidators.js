@@ -1,6 +1,6 @@
 const { body, param, query } = require("express-validator");
 
-const allowedRoles = ["student", "mentor", "coordinator"];
+const allowedRoles = ["mentor", "coordinator", "teamleader"];
 const allowedProjectStatuses = ["not_started", "in_progress", "completed"];
 const allowedUpdateStatuses = ["approved", "rejected"];
 const allowedMilestoneStatuses = ["pending", "completed"];

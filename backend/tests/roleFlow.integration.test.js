@@ -12,7 +12,7 @@ const SECRET = "integration-test-secret";
 const buildApp = () => {
   const app = express();
 
-  app.get("/student-area", authMiddleware, allowRoles("student"), (req, res) => {
+  app.get("/teamleader-area", authMiddleware, allowRoles("teamleader"), (req, res) => {
     res.status(200).json({ success: true, role: req.user.role });
   });
 
@@ -28,7 +28,7 @@ test.before(() => {
 test("returns 401 when auth token is missing", async () => {
   const app = buildApp();
 
-  const response = await request(app).get("/student-area");
+  const response = await request(app).get("/teamleader-area");
 
   assert.equal(response.status, 401);
   assert.equal(response.body.success, false);
@@ -39,7 +39,7 @@ test("returns 401 when auth token is invalid", async () => {
   const app = buildApp();
 
   const response = await request(app)
-    .get("/student-area")
+    .get("/teamleader-area")
     .set("Authorization", "Bearer invalid-token");
 
   assert.equal(response.status, 401);
@@ -52,7 +52,7 @@ test("returns 403 when role is not allowed", async () => {
   const mentorToken = issueToken("mentor");
 
   const response = await request(app)
-    .get("/student-area")
+    .get("/teamleader-area")
     .set("Authorization", `Bearer ${mentorToken}`);
 
   assert.equal(response.status, 403);
@@ -60,15 +60,15 @@ test("returns 403 when role is not allowed", async () => {
   assert.equal(response.body.message, "Access denied");
 });
 
-test("returns 200 for allowed student role", async () => {
+test("returns 200 for allowed teamleader role", async () => {
   const app = buildApp();
-  const studentToken = issueToken("student");
+  const teamleaderToken = issueToken("teamleader");
 
   const response = await request(app)
-    .get("/student-area")
-    .set("Authorization", `Bearer ${studentToken}`);
+    .get("/teamleader-area")
+    .set("Authorization", `Bearer ${teamleaderToken}`);
 
   assert.equal(response.status, 200);
   assert.equal(response.body.success, true);
-  assert.equal(response.body.role, "student");
+  assert.equal(response.body.role, "teamleader");
 });

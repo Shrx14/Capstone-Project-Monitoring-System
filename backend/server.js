@@ -13,6 +13,9 @@ const projectRoutes = require("./routes/projectRoutes");
 const updateRoutes = require("./routes/updateRoutes");
 const milestoneRoutes = require("./routes/milestoneRoutes");
 const announcementRoutes = require("./routes/announcementRoutes");
+const teamRoutes = require("./routes/teamRoutes");
+const scheduleRoutes = require("./routes/scheduleRoutes");
+const taskSubmissionRoutes = require("./routes/taskSubmissionRoutes");
 const globalErrorHandler = require("./middleware/errorHandler");
 
 const app = express();
@@ -70,6 +73,9 @@ app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/updates", updateRoutes);
 app.use("/api/v1/milestones", milestoneRoutes);
 app.use("/api/v1/announcements", announcementRoutes);
+app.use("/api/v1/teams", teamRoutes);
+app.use("/api/v1/schedules", scheduleRoutes);
+app.use("/api/v1/task-submissions", taskSubmissionRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
