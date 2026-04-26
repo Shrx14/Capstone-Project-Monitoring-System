@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import axiosInstance from '../../axiosInstance'
 import { useAuth } from '../../context/AuthContext'
+import TeamInfoCard from '../../components/teamleader/TeamInfoCard'
+import TaskCard from '../../components/teamleader/TaskCard'
+import TaskSubmitModal from '../../components/teamleader/TaskSubmitModal'
 
 function TeamLeaderDashboard() {
   const { user, team: contextTeam, updateTeam } = useAuth()
@@ -10,6 +13,7 @@ function TeamLeaderDashboard() {
   const [submissions, setSubmissions] = useState([])
   const [announcements, setAnnouncements] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeModal, setActiveModal] = useState(null)
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
@@ -54,6 +58,14 @@ function TeamLeaderDashboard() {
     }
   }, [contextTeam?._id, user?.role, fetchAll])
 
+  const submissionsMap = useMemo(() => {
+    const map = {}
+    for (const sub of submissions) {
+      map[sub.taskId] = sub
+    }
+    return map
+  }, [submissions])
+
   const stats = useMemo(() => {
     const all = submissions || []
     return {
@@ -73,93 +85,132 @@ function TeamLeaderDashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <div className="space-y-6 lg:col-span-2">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <h2 className="text-xl font-bold text-white">Team Leader Dashboard</h2>
-          <p className="mt-1 text-sm text-neutral-400">Welcome, {user?.name}</p>
-        </div>
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <h3 className="mb-3 text-lg font-semibold text-white">Team</h3>
-          {!team ? (
-            <p className="text-sm text-neutral-500">No team linked to your account.</p>
-          ) : (
-            <div className="space-y-2 text-sm text-neutral-300">
-              <p><span className="text-neutral-500">Team ID:</span> <span className="font-mono">{team.teamId}</span></p>
-              <p><span className="text-neutral-500">Status:</span> {team.status}</p>
-              <p><span className="text-neutral-500">Category:</span> {team.category}</p>
-              <p><span className="text-neutral-500">Branch:</span> {team.branch}</p>
-              <p><span className="text-neutral-500">Academic Year:</span> {team.academicYear}</p>
-            </div>
-          )}
-        </div>
-
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <h3 className="mb-3 text-lg font-semibold text-white">Project Schedule</h3>
-          {!schedule ? (
-            <p className="text-sm text-neutral-500">
-              No project schedule has been uploaded yet. Your coordinator will upload it soon.
-            </p>
-          ) : (
-            <div>
-              <h4 className="text-base font-semibold text-neutral-100">{schedule.title}</h4>
-              {schedule.description && <p className="mt-1 text-sm text-neutral-400">{schedule.description}</p>}
-              <div className="mt-4 space-y-3">
-                {[...(schedule.tasks || [])]
-                  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || new Date(a.fromDate) - new Date(b.fromDate))
-                  .map((task) => {
-                    const submission = submissions.find((s) => String(s.taskId) === String(task._id))
-                    return (
-                      <div key={task._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
-                        <div className="flex items-center justify-between gap-3">
-                          <p className="text-sm font-semibold text-white">Step {(task.order ?? 0) + 1} - {task.title}</p>
-                          <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-neutral-300">
-                            {submission?.status || 'not_started'}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-xs text-neutral-500">
-                          {new Date(task.fromDate).toLocaleDateString()} to {new Date(task.toDate).toLocaleDateString()}
-                        </p>
-                        {task.description && <p className="mt-1 text-sm text-neutral-400">{task.description}</p>}
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-          )}
-        </div>
+    <div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white">Team Leader Dashboard</h2>
+        <p className="text-sm text-neutral-400">Welcome, {user?.name}</p>
       </div>
 
-      <div className="space-y-6 lg:col-span-1">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <h3 className="mb-3 text-lg font-semibold text-white">Quick Stats</h3>
-          <div className="space-y-2 text-sm text-neutral-300">
-            <p>Total Tasks: {stats.totalTasks}</p>
-            <p>Completed: {stats.completed}</p>
-            <p>Submitted: {stats.submitted}</p>
-            <p className={stats.reassigned > 0 ? 'text-red-300' : ''}>Reassigned: {stats.reassigned}</p>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* LEFT (col-span-2) */}
+        <div className="space-y-6 lg:col-span-2">
+          {/* Team Info Card */}
+          {team && <TeamInfoCard team={team} />}
+
+          {/* Project Schedule */}
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-white">Project Schedule</h3>
+            {!schedule ? (
+              <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
+                <p className="text-sm text-neutral-500">
+                  No project schedule has been uploaded yet. Your coordinator will upload it soon.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h4 className="text-base font-semibold text-neutral-100">{schedule.title}</h4>
+                {schedule.description && (
+                  <p className="mt-1 text-sm text-neutral-400">{schedule.description}</p>
+                )}
+                <div className="mt-4 space-y-3">
+                  {[...(schedule.tasks || [])]
+                    .sort(
+                      (a, b) =>
+                        (a.order ?? 0) - (b.order ?? 0) ||
+                        new Date(a.fromDate) - new Date(b.fromDate)
+                    )
+                    .map((task) => (
+                      <TaskCard
+                        key={task._id}
+                        task={task}
+                        submission={submissionsMap[task._id] || null}
+                        onOpenSubmitForm={(t, s) => setActiveModal({ task: t, submission: s })}
+                      />
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <h3 className="mb-3 text-lg font-semibold text-white">Announcements</h3>
-          {announcements.length === 0 ? (
-            <p className="text-sm text-neutral-500">No announcements yet.</p>
-          ) : (
-            <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
-              {announcements.map((item) => (
-                <div key={item._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
-                  <p className="text-sm text-neutral-300">{item.message}</p>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    {new Date(item.date).toLocaleDateString()} · {item.createdBy?.name}
-                  </p>
-                </div>
-              ))}
+        {/* RIGHT (col-span-1) */}
+        <div className="space-y-6 lg:col-span-1">
+          {/* Quick Stats */}
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-white">Quick Stats</h3>
+            <div className="space-y-2 text-sm text-neutral-300">
+              <div className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2">
+                <span className="text-neutral-400">Total Tasks</span>
+                <span className="font-bold text-white">{stats.totalTasks}</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-emerald-500/10 px-3 py-2">
+                <span className="text-emerald-300">Completed</span>
+                <span className="font-bold text-emerald-200">{stats.completed}</span>
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-yellow-500/10 px-3 py-2">
+                <span className="text-yellow-300">Submitted (awaiting)</span>
+                <span className="font-bold text-yellow-200">{stats.submitted}</span>
+              </div>
+              <div className={`flex items-center justify-between rounded-lg px-3 py-2 ${stats.reassigned > 0 ? 'bg-red-500/10' : 'bg-white/5'}`}>
+                <span className={stats.reassigned > 0 ? 'text-red-300' : 'text-neutral-400'}>
+                  Reassigned {stats.reassigned > 0 ? '⚠' : ''}
+                </span>
+                <span className={`font-bold ${stats.reassigned > 0 ? 'text-red-200' : 'text-white'}`}>
+                  {stats.reassigned}
+                </span>
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Announcements */}
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-white">Announcements</h3>
+            {announcements.length === 0 ? (
+              <p className="text-sm text-neutral-500">No announcements yet.</p>
+            ) : (
+              <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
+                {announcements.map((item) => (
+                  <div key={item._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                    <p className="text-sm text-neutral-300">{item.message}</p>
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {new Date(item.date).toLocaleDateString()} · {item.createdBy?.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Modal overlay */}
+      {activeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-neutral-900/95 p-6 shadow-2xl backdrop-blur-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-white">Task Submission</h3>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-sm text-neutral-400 hover:bg-white/10 hover:text-white transition"
+              >
+                ✕
+              </button>
+            </div>
+            <TaskSubmitModal
+              task={activeModal.task}
+              submission={activeModal.submission}
+              scheduleId={schedule?._id}
+              teamMembers={team?.members || []}
+              onClose={() => setActiveModal(null)}
+              onSuccess={() => {
+                setActiveModal(null)
+                fetchAll()
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
