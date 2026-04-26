@@ -4,9 +4,14 @@ const Team = require("../models/Team");
 
 const allowedRoles = ["mentor", "coordinator"];
 
+const inviteCodesByRole = {
+  mentor: process.env.MENTOR_INVITE_CODE,
+  coordinator: process.env.COORDINATOR_INVITE_CODE,
+};
+
 const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, inviteCode } = req.body;
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ success: false, message: "All fields are required" });
@@ -14,6 +19,10 @@ const register = async (req, res) => {
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({ success: false, message: "Invalid role" });
+    }
+
+    if (!inviteCode || inviteCode !== inviteCodesByRole[role]) {
+      return res.status(403).json({ success: false, message: "Invalid invite code for the selected role" });
     }
 
     const existingUser = await User.findOne({ email });
