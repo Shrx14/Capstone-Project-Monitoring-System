@@ -79,7 +79,7 @@ function TeamLeaderDashboard() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-white border-t-transparent" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-heading border-t-transparent" />
       </div>
     )
   }
@@ -87,8 +87,8 @@ function TeamLeaderDashboard() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white">Team Leader Dashboard</h2>
-        <p className="text-sm text-neutral-400">Welcome, {user?.name}</p>
+        <h2 className="text-2xl font-bold text-heading">Team Leader Dashboard</h2>
+        <p className="text-sm text-secondary">Welcome, {user?.name}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -98,19 +98,19 @@ function TeamLeaderDashboard() {
           {team && <TeamInfoCard team={team} />}
 
           {/* Project Schedule */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-            <h3 className="mb-3 text-lg font-semibold text-white">Project Schedule</h3>
+          <div className="rounded-2xl border border-line bg-surface p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-heading">Project Schedule</h3>
             {!schedule ? (
-              <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
-                <p className="text-sm text-neutral-500">
+              <div className="rounded-xl border border-line bg-surface p-6 text-center">
+                <p className="text-sm text-muted">
                   No project schedule has been uploaded yet. Your coordinator will upload it soon.
                 </p>
               </div>
             ) : (
               <div>
-                <h4 className="text-base font-semibold text-neutral-100">{schedule.title}</h4>
+                <h4 className="text-base font-semibold text-heading">{schedule.title}</h4>
                 {schedule.description && (
-                  <p className="mt-1 text-sm text-neutral-400">{schedule.description}</p>
+                  <p className="mt-1 text-sm text-secondary">{schedule.description}</p>
                 )}
                 <div className="mt-4 space-y-3">
                   {[...(schedule.tasks || [])]
@@ -136,12 +136,12 @@ function TeamLeaderDashboard() {
         {/* RIGHT (col-span-1) */}
         <div className="space-y-6 lg:col-span-1">
           {/* Quick Stats */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-            <h3 className="mb-3 text-lg font-semibold text-white">Quick Stats</h3>
-            <div className="space-y-2 text-sm text-neutral-300">
-              <div className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2">
-                <span className="text-neutral-400">Total Tasks</span>
-                <span className="font-bold text-white">{stats.totalTasks}</span>
+          <div className="rounded-2xl border border-line bg-surface p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-heading">Quick Stats</h3>
+            <div className="space-y-2 text-sm text-body">
+              <div className="flex items-center justify-between rounded-lg bg-surface px-3 py-2">
+                <span className="text-secondary">Total Tasks</span>
+                <span className="font-bold text-heading">{stats.totalTasks}</span>
               </div>
               <div className="flex items-center justify-between rounded-lg bg-emerald-500/10 px-3 py-2">
                 <span className="text-emerald-300">Completed</span>
@@ -151,11 +151,11 @@ function TeamLeaderDashboard() {
                 <span className="text-yellow-300">Submitted (awaiting)</span>
                 <span className="font-bold text-yellow-200">{stats.submitted}</span>
               </div>
-              <div className={`flex items-center justify-between rounded-lg px-3 py-2 ${stats.reassigned > 0 ? 'bg-red-500/10' : 'bg-white/5'}`}>
-                <span className={stats.reassigned > 0 ? 'text-red-300' : 'text-neutral-400'}>
+              <div className={`flex items-center justify-between rounded-lg px-3 py-2 ${stats.reassigned > 0 ? 'bg-red-500/10' : 'bg-surface'}`}>
+                <span className={stats.reassigned > 0 ? 'text-red-300' : 'text-secondary'}>
                   Reassigned {stats.reassigned > 0 ? '⚠' : ''}
                 </span>
-                <span className={`font-bold ${stats.reassigned > 0 ? 'text-red-200' : 'text-white'}`}>
+                <span className={`font-bold ${stats.reassigned > 0 ? 'text-red-200' : 'text-heading'}`}>
                   {stats.reassigned}
                 </span>
               </div>
@@ -163,16 +163,16 @@ function TeamLeaderDashboard() {
           </div>
 
           {/* Announcements */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-            <h3 className="mb-3 text-lg font-semibold text-white">Announcements</h3>
+          <div className="rounded-2xl border border-line bg-surface p-5 backdrop-blur-sm">
+            <h3 className="mb-3 text-lg font-semibold text-heading">Announcements</h3>
             {announcements.length === 0 ? (
-              <p className="text-sm text-neutral-500">No announcements yet.</p>
+              <p className="text-sm text-muted">No announcements yet.</p>
             ) : (
               <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
                 {announcements.map((item) => (
-                  <div key={item._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
-                    <p className="text-sm text-neutral-300">{item.message}</p>
-                    <p className="mt-1 text-xs text-neutral-500">
+                  <div key={item._id} className="rounded-xl border border-line bg-surface p-3">
+                    <p className="text-sm text-body">{item.message}</p>
+                    <p className="mt-1 text-xs text-muted">
                       {new Date(item.date).toLocaleDateString()} · {item.createdBy?.name}
                     </p>
                   </div>
@@ -185,14 +185,14 @@ function TeamLeaderDashboard() {
 
       {/* Modal overlay */}
       {activeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-neutral-900/95 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-line bg-elevated p-6 shadow-2xl backdrop-blur-xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">Task Submission</h3>
+              <h3 className="text-lg font-bold text-heading">Task Submission</h3>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-sm text-neutral-400 hover:bg-white/10 hover:text-white transition"
+                className="rounded-lg border border-line bg-surface px-3 py-1 text-sm text-secondary hover:bg-surface-alt hover:text-heading transition"
               >
                 ✕
               </button>

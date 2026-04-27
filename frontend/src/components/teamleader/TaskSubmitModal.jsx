@@ -23,14 +23,14 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
 
         {submission.memberContributions?.length > 0 && (
           <div>
-            <h4 className="mb-2 text-sm font-semibold text-neutral-300">Member Contributions</h4>
+            <h4 className="mb-2 text-sm font-semibold text-body">Member Contributions</h4>
             <div className="space-y-2">
               {submission.memberContributions.map((mc, idx) => (
-                <div key={idx} className="rounded-lg border border-white/10 bg-white/5 p-3">
-                  <p className="text-sm font-medium text-neutral-200">
-                    {mc.memberName} <span className="font-mono text-xs text-neutral-500">({mc.rollNo})</span>
+                <div key={idx} className="rounded-lg border border-line bg-surface p-3">
+                  <p className="text-sm font-medium text-label">
+                    {mc.memberName} <span className="font-mono text-xs text-muted">({mc.rollNo})</span>
                   </p>
-                  <p className="mt-1 text-sm text-neutral-400">{mc.workDone}</p>
+                  <p className="mt-1 text-sm text-secondary">{mc.workDone}</p>
                 </div>
               ))}
             </div>
@@ -40,7 +40,7 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
         <button
           type="button"
           onClick={onClose}
-          className="w-full rounded-lg border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+          className="w-full rounded-lg border border-line bg-surface py-2.5 text-sm font-semibold text-heading transition hover:bg-surface-alt"
         >
           Close
         </button>
@@ -132,10 +132,10 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
   return (
     <div className="space-y-5">
       <div>
-        <h3 className="text-lg font-bold text-white">
+        <h3 className="text-lg font-bold text-heading">
           Step {(task.order ?? 0) + 1} — {task.title}
         </h3>
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-muted">
           {formatDate(task.fromDate)} → {formatDate(task.toDate)}
         </p>
       </div>
@@ -149,26 +149,26 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
 
       {/* Section 1: Progress Summary */}
       <div>
-        <h4 className="mb-2 text-sm font-semibold text-neutral-300">Progress Summary</h4>
+        <h4 className="mb-2 text-sm font-semibold text-body">Progress Summary</h4>
         <textarea
           {...register('statusNote')}
           rows={3}
           maxLength={2000}
           placeholder="Describe overall progress..."
-          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 outline-none transition focus:border-white/30 focus:ring-2 focus:ring-white/20"
+          className="w-full rounded-lg border border-line bg-input-bg px-3 py-2.5 text-sm text-heading placeholder-hint outline-none transition focus:border-line-focus focus:ring-2 focus:ring-accent"
         />
       </div>
 
       {/* Section 2: Member Contributions */}
       <div>
-        <h4 className="mb-1 text-sm font-semibold text-neutral-300">Member Contributions</h4>
-        <p className="mb-3 text-xs text-neutral-500">Enter what each member worked on for this task.</p>
+        <h4 className="mb-1 text-sm font-semibold text-body">Member Contributions</h4>
+        <p className="mb-3 text-xs text-muted">Enter what each member worked on for this task.</p>
         <div className="space-y-3">
           {fields.map((field, index) => (
-            <div key={field.id} className="rounded-lg border border-white/10 bg-white/5 p-3">
-              <p className="mb-1 text-xs font-medium text-neutral-300">
+            <div key={field.id} className="rounded-lg border border-line bg-surface p-3">
+              <p className="mb-1 text-xs font-medium text-body">
                 {field.memberName}{' '}
-                <span className="font-mono text-neutral-500">({field.rollNo})</span>
+                <span className="font-mono text-muted">({field.rollNo})</span>
               </p>
               <input type="hidden" {...register(`memberContributions.${index}.memberName`)} />
               <input type="hidden" {...register(`memberContributions.${index}.rollNo`)} />
@@ -176,7 +176,7 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
                 {...register(`memberContributions.${index}.workDone`, { required: true })}
                 rows={2}
                 placeholder={`What ${field.memberName} worked on...`}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 outline-none transition focus:border-white/30 focus:ring-1 focus:ring-white/20"
+                className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading placeholder-hint outline-none transition focus:border-line-focus focus:ring-1 focus:ring-accent"
               />
             </div>
           ))}
@@ -185,21 +185,21 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
 
       {/* Section 3: File */}
       <div>
-        <h4 className="mb-2 text-sm font-semibold text-neutral-300">Attach a File (optional)</h4>
+        <h4 className="mb-2 text-sm font-semibold text-body">Attach a File (optional)</h4>
         <input
           type="file"
           accept=".pdf,.docx,.png,.jpg,.jpeg"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="w-full text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border file:border-white/10 file:bg-white/5 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-white hover:file:bg-white/10"
+          className="w-full text-sm text-secondary file:mr-3 file:rounded-lg file:border file:border-line file:bg-surface file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-heading hover:file:bg-surface-alt"
         />
-        {file && <p className="mt-1 text-xs text-neutral-500">Selected: {file.name}</p>}
+        {file && <p className="mt-1 text-xs text-muted">Selected: {file.name}</p>}
       </div>
 
       {/* Upload progress */}
       {uploading && uploadProgress > 0 && (
-        <div className="rounded-full bg-white/10 overflow-hidden">
+        <div className="rounded-full bg-surface-alt overflow-hidden">
           <div
-            className="h-1.5 rounded-full bg-white transition-all duration-300"
+            className="h-1.5 rounded-full bg-heading transition-all duration-300"
             style={{ width: `${uploadProgress}%` }}
           />
         </div>
@@ -211,7 +211,7 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
           type="button"
           onClick={saveDraft}
           disabled={uploading}
-          className="rounded-lg border border-white/15 bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-lg border border-line bg-surface py-2.5 text-sm font-semibold text-heading transition hover:bg-surface-alt disabled:cursor-not-allowed disabled:opacity-60"
         >
           Save Draft
         </button>
@@ -219,7 +219,7 @@ function TaskSubmitModal({ task, submission, scheduleId, teamMembers, onClose, o
           type="button"
           onClick={handleSubmit(submitToMentor)}
           disabled={uploading}
-          className="rounded-lg bg-white py-2.5 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-lg bg-btn py-2.5 text-sm font-semibold text-ink transition hover:bg-btn-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {uploading ? 'Submitting...' : 'Submit to Mentor'}
         </button>

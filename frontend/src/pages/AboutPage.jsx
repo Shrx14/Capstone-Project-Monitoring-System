@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { ArrowLeft, Moon, Sun } from 'lucide-react'
 import { EtheralShadow } from '@/components/ui/EtheralShadow'
+import { useTheme } from '../context/ThemeContext'
 import KineticTeamHybrid from '@/components/ui/KineticTeamHybrid'
 import collegeLogo from '../assets/college logo.png'
-import { ArrowLeft } from 'lucide-react'
 
 /* ---------- Member Photos ---------- */
 import sumitPhoto from '../assets/sumit pawar.jpeg'
@@ -65,16 +66,18 @@ const TEAM = [
 ]
 
 function AboutPage() {
+  const { isDark, toggleTheme } = useTheme()
+
   return (
-    <div className="relative min-h-screen bg-neutral-950">
+    <div className="relative min-h-screen bg-page">
       {/* Background */}
       <div className="fixed inset-0 z-0">
         <EtheralShadow
-          color="rgba(120, 120, 120, 1)"
+          color={isDark ? 'rgba(120, 120, 120, 1)' : 'rgba(100, 140, 200, 0.5)'}
           animation={{ scale: 80, speed: 80 }}
-          noise={{ opacity: 0.8, scale: 1.2 }}
+          noise={{ opacity: isDark ? 0.8 : 0.4, scale: 1.2 }}
           sizing="fill"
-          style={{ backgroundColor: '#0a0a0a' }}
+          style={{ backgroundColor: isDark ? '#0a0a0a' : '#eef0f5' }}
         />
       </div>
 
@@ -84,27 +87,35 @@ function AboutPage() {
         <nav className="flex items-center justify-between px-6 py-5 sm:px-10 lg:px-16">
           <div className="flex items-center gap-3">
             <img src={collegeLogo} alt="FCRIT Logo" className="h-14 w-14 object-contain" />
-            <span className="text-xs font-light tracking-wide text-neutral-400">
+            <span className="text-xs font-light tracking-wide text-secondary">
               Fr. Conceicao Rodrigues Institute Of Technology
             </span>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-lg border border-line bg-surface p-2 text-secondary backdrop-blur-sm transition-all duration-300 hover:border-line-hover hover:bg-surface-alt hover:text-heading"
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-5 py-2 text-sm font-medium text-neutral-200 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-5 py-2 text-sm font-medium text-label backdrop-blur-sm transition-all duration-300 hover:border-line-hover hover:bg-surface-alt hover:text-heading"
             >
               <ArrowLeft size={16} />
               Home
             </Link>
             <Link
               to="/login"
-              className="rounded-lg border border-white/15 bg-white/5 px-5 py-2 text-sm font-medium text-neutral-200 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
+              className="rounded-lg border border-line bg-surface px-5 py-2 text-sm font-medium text-label backdrop-blur-sm transition-all duration-300 hover:border-line-hover hover:bg-surface-alt hover:text-heading"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="rounded-lg bg-white px-5 py-2 text-sm font-semibold text-neutral-900 transition-all duration-300 hover:bg-neutral-200 hover:shadow-lg hover:shadow-white/10"
+              className="rounded-lg bg-btn px-5 py-2 text-sm font-semibold text-ink transition-all duration-300 hover:bg-btn-hover hover:shadow-lg hover:shadow-glow"
             >
               Register
             </Link>
@@ -119,13 +130,13 @@ function AboutPage() {
           className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12"
         >
           <div className="mb-16 max-w-3xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-muted">
               About the Project
             </p>
-            <h2 className="mb-6 text-3xl font-light tracking-tight text-white sm:text-4xl">
+            <h2 className="mb-6 text-3xl font-light tracking-tight text-heading sm:text-4xl">
               Built by students, for students.
             </h2>
-            <p className="text-sm leading-relaxed text-neutral-400">
+            <p className="text-sm leading-relaxed text-secondary">
               The Capstone Project Monitoring System is an intelligent web application designed to modernize the way academic projects are managed and tracked. It provides a structured ecosystem where students can submit milestones, mentors can review and guide progress, and coordinators can oversee all projects through a centralized dashboard. With features like role-based access control, secure authentication, real-time updates, and file management, the system eliminates inefficiencies of manual tracking and enhances transparency, accountability, and collaboration across all stakeholders.
             </p>
           </div>
@@ -146,17 +157,17 @@ function AboutPage() {
           className="mx-auto w-full max-w-6xl px-6 pt-12 md:px-12"
         >
           <div className="mb-16 max-w-3xl">
-            <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
+            <p className="mb-4 text-xs font-medium uppercase tracking-[0.3em] text-muted">
               Academic Attribution
             </p>
-            <p className="text-sm leading-relaxed text-neutral-400">
+            <p className="text-sm leading-relaxed text-secondary">
               This project was developed as part of the Full Stack Development Laboratory course at Fr. C. Rodrigues Institute of Technology, Vashi, Navi Mumbai, Department of Computer Engineering.
             </p>
           </div>
         </motion.div>
 
         {/* Footer */}
-        <footer className="py-8 text-center text-xs text-neutral-600">
+        <footer className="py-8 text-center text-xs text-faint">
           © 2026 Capstone Project Monitoring System. All rights reserved.
         </footer>
       </div>

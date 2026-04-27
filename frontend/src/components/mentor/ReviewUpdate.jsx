@@ -36,17 +36,17 @@ function ReviewUpdate({ updates, onReviewComplete }) {
   }
 
   if (updates.length === 0) {
-    return <p className="py-4 text-sm text-neutral-500">No progress updates for this project.</p>
+    return <p className="py-4 text-sm text-muted">No progress updates for this project.</p>
   }
 
   return (
     <div className="space-y-4">
       {updates.map((u) => (
-        <div key={u._id} className="rounded-xl border border-white/5 bg-white/5 p-4">
+        <div key={u._id} className="rounded-xl border border-line bg-surface p-4">
           <div className="mb-2 flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-200">{u.submittedBy?.name}</p>
-              <p className="text-xs text-neutral-500">
+              <p className="text-sm font-medium text-label">{u.submittedBy?.name}</p>
+              <p className="text-xs text-muted">
                 {new Date(u.createdAt).toLocaleString('en-GB', {
                   day: '2-digit', month: 'short', year: 'numeric',
                   hour: '2-digit', minute: '2-digit',
@@ -56,7 +56,7 @@ function ReviewUpdate({ updates, onReviewComplete }) {
             <StatusBadge status={u.status} />
           </div>
 
-          <p className="mb-2 max-h-32 overflow-y-auto text-sm text-neutral-300">{u.text}</p>
+          <p className="mb-2 max-h-32 overflow-y-auto text-sm text-body">{u.text}</p>
 
           {(u.fileAccessUrl || u.fileUrl) && (
             <a href={u.fileAccessUrl || u.fileUrl} target="_blank" rel="noreferrer" className="mb-2 block text-xs font-medium text-blue-400 hover:underline">
@@ -65,8 +65,8 @@ function ReviewUpdate({ updates, onReviewComplete }) {
           )}
 
           {u.status !== 'pending' && u.feedback && (
-            <p className="mb-2 rounded-lg bg-white/5 p-2 text-xs text-neutral-400">
-              <span className="font-medium text-neutral-300">Feedback:</span> {u.feedback}
+            <p className="mb-2 rounded-lg bg-surface p-2 text-xs text-secondary">
+              <span className="font-medium text-body">Feedback:</span> {u.feedback}
             </p>
           )}
 
@@ -77,7 +77,7 @@ function ReviewUpdate({ updates, onReviewComplete }) {
                 onChange={(e) => setFeedbacks((prev) => ({ ...prev, [u._id]: e.target.value }))}
                 rows={2}
                 placeholder="Add feedback (optional)..."
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white placeholder-neutral-500 outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+                className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-xs text-heading placeholder-hint outline-none focus:border-line-focus focus:ring-1 focus:ring-accent"
               />
               <div className="flex gap-2">
                 <button

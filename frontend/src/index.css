@@ -1,1 +1,235 @@
 @import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   THEME SYSTEM — CSS Custom Properties
+   Default: Dark mode. Light: [data-theme="light"]
+   ═══════════════════════════════════════════════ */
+
+:root {
+  /* Backgrounds */
+  --c-page: #0a0a0a;
+  --c-surface: rgba(255, 255, 255, 0.05);
+  --c-surface-hover: rgba(255, 255, 255, 0.08);
+  --c-surface-alt: rgba(255, 255, 255, 0.1);
+  --c-elevated: rgba(23, 23, 23, 0.95);
+  --c-overlay: rgba(0, 0, 0, 0.6);
+  --c-nav: rgba(0, 0, 0, 0.4);
+  --c-input: rgba(255, 255, 255, 0.05);
+  --c-btn: #ffffff;
+  --c-btn-hover: #e5e5e5;
+  --c-btn-soft: rgba(255, 255, 255, 0.05);
+  --c-btn-soft-hover: rgba(255, 255, 255, 0.1);
+  --c-badge: rgba(255, 255, 255, 0.15);
+  --c-option: #171717;
+
+  /* Borders */
+  --c-line: rgba(255, 255, 255, 0.1);
+  --c-line-hover: rgba(255, 255, 255, 0.2);
+  --c-line-focus: rgba(255, 255, 255, 0.3);
+  --c-line-subtle: rgba(255, 255, 255, 0.05);
+
+  /* Text */
+  --c-heading: #ffffff;
+  --c-label: #e5e5e5;
+  --c-body: #d4d4d4;
+  --c-secondary: #a3a3a3;
+  --c-muted: #737373;
+  --c-faint: #525252;
+  --c-ink: #171717;
+  --c-hint: #737373;
+
+  /* Focus & Misc */
+  --c-accent: rgba(255, 255, 255, 0.2);
+  --c-glow: rgba(255, 255, 255, 0.06);
+
+  /* EtheralShadow */
+  --c-shadow-bg: #0a0a0a;
+  --c-shadow-color: rgba(120, 120, 120, 1);
+}
+
+[data-theme="light"] {
+  /* Backgrounds — semi-transparent for glassmorphism */
+  --c-page: #f0f2f7;
+  --c-surface: rgba(255, 255, 255, 0.55);
+  --c-surface-hover: rgba(255, 255, 255, 0.65);
+  --c-surface-alt: rgba(255, 255, 255, 0.45);
+  --c-elevated: rgba(255, 255, 255, 0.85);
+  --c-overlay: rgba(0, 0, 0, 0.25);
+  --c-nav: rgba(255, 255, 255, 0.45);
+  --c-input: rgba(255, 255, 255, 0.6);
+  --c-btn: #171717;
+  --c-btn-hover: #262626;
+  --c-btn-soft: rgba(255, 255, 255, 0.4);
+  --c-btn-soft-hover: rgba(255, 255, 255, 0.55);
+  --c-badge: rgba(0, 0, 0, 0.06);
+  --c-option: #ffffff;
+
+  /* Borders — translucent for glass edges */
+  --c-line: rgba(255, 255, 255, 0.6);
+  --c-line-hover: rgba(255, 255, 255, 0.8);
+  --c-line-focus: rgba(0, 0, 0, 0.15);
+  --c-line-subtle: rgba(255, 255, 255, 0.35);
+
+  /* Text */
+  --c-heading: #171717;
+  --c-label: #262626;
+  --c-body: #404040;
+  --c-secondary: #525252;
+  --c-muted: #737373;
+  --c-faint: #a3a3a3;
+  --c-ink: #ffffff;
+  --c-hint: #a3a3a3;
+
+  /* Focus & Misc */
+  --c-accent: rgba(59, 130, 246, 0.3);
+  --c-glow: rgba(0, 0, 0, 0.1);
+
+  /* EtheralShadow */
+  --c-shadow-bg: #e4e8f0;
+  --c-shadow-color: rgba(80, 120, 200, 0.45);
+}
+
+/* ═══════════════════════════════════════════════
+   Register theme colors for Tailwind utilities
+   bg-page, text-heading, border-line, etc.
+   ═══════════════════════════════════════════════ */
+
+@theme inline {
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-surface-hover: var(--c-surface-hover);
+  --color-surface-alt: var(--c-surface-alt);
+  --color-elevated: var(--c-elevated);
+  --color-overlay: var(--c-overlay);
+  --color-nav: var(--c-nav);
+  --color-input-bg: var(--c-input);
+  --color-btn: var(--c-btn);
+  --color-btn-hover: var(--c-btn-hover);
+  --color-btn-soft: var(--c-btn-soft);
+  --color-btn-soft-hover: var(--c-btn-soft-hover);
+  --color-badge: var(--c-badge);
+  --color-option: var(--c-option);
+
+  --color-line: var(--c-line);
+  --color-line-hover: var(--c-line-hover);
+  --color-line-focus: var(--c-line-focus);
+  --color-line-subtle: var(--c-line-subtle);
+
+  --color-heading: var(--c-heading);
+  --color-label: var(--c-label);
+  --color-body: var(--c-body);
+  --color-secondary: var(--c-secondary);
+  --color-th-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+  --color-ink: var(--c-ink);
+  --color-hint: var(--c-hint);
+
+  --color-accent: var(--c-accent);
+  --color-glow: var(--c-glow);
+}
+
+/* ═══════════════════════════════════════════════
+   Light-mode overrides for status / accent colors
+   These ensure status badges stay readable
+   ═══════════════════════════════════════════════ */
+
+html[data-theme="light"] {
+  /* Emerald status */
+  & .text-emerald-300 { color: #059669; }
+  & .text-emerald-200 { color: #059669; }
+  & .bg-emerald-500\/10 { background-color: #ecfdf5; }
+  & .bg-emerald-500\/20 { background-color: #d1fae5; }
+  & .border-emerald-500\/30 { border-color: #86efac; }
+
+  /* Yellow status */
+  & .text-yellow-300 { color: #ca8a04; }
+  & .text-yellow-200 { color: #ca8a04; }
+  & .bg-yellow-500\/10 { background-color: #fefce8; }
+  & .bg-yellow-500\/20 { background-color: #fef9c3; }
+  & .bg-yellow-500\/5 { background-color: #fefce8; }
+  & .border-yellow-500\/20 { border-color: #fde68a; }
+  & .border-yellow-500\/30 { border-color: #fcd34d; }
+
+  /* Red status */
+  & .text-red-300 { color: #dc2626; }
+  & .text-red-200 { color: #dc2626; }
+  & .text-red-400 { color: #dc2626; }
+  & .bg-red-500\/10 { background-color: #fef2f2; }
+  & .bg-red-500\/20 { background-color: #fee2e2; }
+  & .border-red-500\/30 { border-color: #fca5a5; }
+  & .border-red-500\/40 { border-color: #f87171; }
+  & .border-red-500\/20 { border-color: #fecaca; }
+
+  /* Blue status */
+  & .text-blue-300 { color: #2563eb; }
+  & .bg-blue-500\/10 { background-color: #eff6ff; }
+  & .bg-blue-500\/20 { background-color: #dbeafe; }
+
+  /* Amber */
+  & .text-amber-300 { color: #d97706; }
+
+  /* Purple / Orange */
+  & .text-purple-300 { color: #7c3aed; }
+  & .bg-purple-500\/20 { background-color: #f5f3ff; }
+  & .text-orange-300 { color: #ea580c; }
+  & .bg-orange-500\/20 { background-color: #fff7ed; }
+
+  /* Indigo */
+  & .text-indigo-100 { color: #4338ca; }
+  & .bg-indigo-500\/10 { background-color: #eef2ff; }
+  & .border-indigo-400\/30 { border-color: #a5b4fc; }
+
+  /* Neutral overrides for status badges */
+  & .bg-neutral-700 { background-color: #e5e5e5; }
+  & .text-neutral-300:is(.rounded-full) { color: #525252; }
+}
+
+/* ═══════════════════════════════════════════════
+   Transition for smooth theme switching
+   ═══════════════════════════════════════════════ */
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   Glassmorphism enhancement for light mode
+   ═══════════════════════════════════════════════ */
+
+html[data-theme="light"] {
+  /* Stronger backdrop-blur + subtle shadow on glass surfaces */
+  & .backdrop-blur-sm {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  & .backdrop-blur-xl {
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  /* Glass cards — any rounded card with a border gets the glass treatment */
+  & .rounded-2xl {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  & .rounded-xl {
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+  }
+
+  /* Navbar glass */
+  & nav {
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Input glass */
+  & input, & textarea, & select {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+}

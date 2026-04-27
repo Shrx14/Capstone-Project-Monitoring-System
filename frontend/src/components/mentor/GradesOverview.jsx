@@ -27,15 +27,15 @@ function GradesOverview({ scheduleId, schedule, teamMembers }) {
   if (loading) {
     return (
       <div className="flex h-32 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-heading border-t-transparent" />
       </div>
     )
   }
 
   if (completedSubmissions.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
-        <p className="text-sm text-neutral-500">No tasks have been completed and graded yet.</p>
+      <div className="rounded-2xl border border-line bg-surface p-6 text-center backdrop-blur-sm">
+        <p className="text-sm text-muted">No tasks have been completed and graded yet.</p>
       </div>
     )
   }
@@ -76,10 +76,10 @@ function GradesOverview({ scheduleId, schedule, teamMembers }) {
         <p className="text-xs font-medium text-yellow-300">⚠️ Grades are confidential — only visible to mentors</p>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+      <div className="overflow-x-auto rounded-2xl border border-line bg-surface backdrop-blur-sm">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-white/10 bg-white/5">
-            <tr className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <thead className="border-b border-line bg-surface-alt">
+            <tr className="text-xs font-semibold uppercase tracking-wide text-muted">
               <th className="px-3 py-2 whitespace-nowrap">Member Name</th>
               <th className="px-3 py-2 whitespace-nowrap">Roll No</th>
               {tasks.map((t) => (
@@ -87,9 +87,9 @@ function GradesOverview({ scheduleId, schedule, teamMembers }) {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/10">
+          <tbody className="divide-y divide-line">
             {teamMembers.map((m) => (
-              <tr key={m.rollNo} className="text-neutral-300">
+              <tr key={m.rollNo} className="text-body">
                 <td className="px-3 py-2">{m.name}</td>
                 <td className="px-3 py-2 font-mono text-xs">{m.rollNo}</td>
                 {tasks.map((t) => (
@@ -106,7 +106,7 @@ function GradesOverview({ scheduleId, schedule, teamMembers }) {
       <button
         type="button"
         onClick={exportCSV}
-        className="rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+        className="rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-heading transition hover:bg-surface-alt"
       >
         📥 Export CSV
       </button>

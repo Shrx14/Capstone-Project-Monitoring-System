@@ -55,24 +55,24 @@ function ScheduleUploadForm({ teams, onSuccess }) {
         </div>
         <div className="space-y-3">
           {(createdSchedule.tasks || []).map((task, idx) => (
-            <div key={task._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
-              <p className="mb-1 text-sm font-semibold text-white">Step {idx + 1} — {task.title}</p>
-              <p className="mb-2 text-xs text-neutral-500">{new Date(task.fromDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} – {new Date(task.toDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+            <div key={task._id} className="rounded-xl border border-line bg-surface p-4">
+              <p className="mb-1 text-sm font-semibold text-heading">Step {idx + 1} — {task.title}</p>
+              <p className="mb-2 text-xs text-muted">{new Date(task.fromDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} – {new Date(task.toDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
               {task.attachments?.length > 0 && (
                 <div className="mb-2 flex flex-wrap gap-2">
                   {task.attachments.map((att, i) => (
-                    <a key={i} href={att.fileUrl} target="_blank" rel="noreferrer" className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-blue-300 hover:bg-white/10 transition">📄 {att.fileName}</a>
+                    <a key={i} href={att.fileUrl} target="_blank" rel="noreferrer" className="rounded-lg border border-line bg-surface px-2 py-1 text-xs text-blue-300 hover:bg-surface-alt transition">📄 {att.fileName}</a>
                   ))}
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <input type="file" onChange={(e) => setTaskFiles((p) => ({ ...p, [task._id]: e.target.files?.[0] }))} className="flex-1 text-xs text-neutral-400 file:mr-2 file:rounded-lg file:border file:border-white/10 file:bg-white/5 file:px-2 file:py-1 file:text-xs file:text-white" />
-                <button type="button" disabled={!taskFiles[task._id] || attachmentUploading[task._id]} onClick={() => handleAttachmentUpload(task._id)} className="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20 disabled:opacity-60">{attachmentUploading[task._id] ? '...' : 'Upload'}</button>
+                <input type="file" onChange={(e) => setTaskFiles((p) => ({ ...p, [task._id]: e.target.files?.[0] }))} className="flex-1 text-xs text-secondary file:mr-2 file:rounded-lg file:border file:border-line file:bg-surface file:px-2 file:py-1 file:text-xs file:text-heading" />
+                <button type="button" disabled={!taskFiles[task._id] || attachmentUploading[task._id]} onClick={() => handleAttachmentUpload(task._id)} className="rounded-lg bg-surface-alt px-3 py-1.5 text-xs font-medium text-heading hover:bg-btn-soft-hover disabled:opacity-60">{attachmentUploading[task._id] ? '...' : 'Upload'}</button>
               </div>
             </div>
           ))}
         </div>
-        <button type="button" onClick={onSuccess} className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 transition">Done</button>
+        <button type="button" onClick={onSuccess} className="w-full rounded-lg bg-btn py-2.5 text-sm font-semibold text-ink hover:bg-btn-hover transition">Done</button>
       </div>
     )
   }
@@ -80,44 +80,44 @@ function ScheduleUploadForm({ teams, onSuccess }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-300">Select Team</label>
-        <select {...register('teamId', { required: 'Team is required' })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none focus:border-white/30">
-          <option value="" className="bg-neutral-900">-- Select a team --</option>
-          {(teams || []).map((t) => (<option key={t._id} value={t._id} className="bg-neutral-900">{t.teamId} — {t.branch} ({t.category})</option>))}
+        <label className="mb-1 block text-sm font-medium text-body">Select Team</label>
+        <select {...register('teamId', { required: 'Team is required' })} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2.5 text-sm text-heading outline-none focus:border-line-focus">
+          <option value="" className="bg-option">-- Select a team --</option>
+          {(teams || []).map((t) => (<option key={t._id} value={t._id} className="bg-option">{t.teamId} — {t.branch} ({t.category})</option>))}
         </select>
         {errors.teamId && <p className="mt-1 text-xs text-red-400">{errors.teamId.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-300">Schedule Title</label>
-        <input {...register('title', { required: 'Title is required', maxLength: 200 })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 outline-none focus:border-white/30" placeholder="e.g. SE Schedule Q1" />
+        <label className="mb-1 block text-sm font-medium text-body">Schedule Title</label>
+        <input {...register('title', { required: 'Title is required', maxLength: 200 })} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2.5 text-sm text-heading placeholder-hint outline-none focus:border-line-focus" placeholder="e.g. SE Schedule Q1" />
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-300">Description (optional)</label>
-        <textarea {...register('description', { maxLength: 2000 })} rows={2} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-neutral-500 outline-none focus:border-white/30" placeholder="Brief overview..." />
+        <label className="mb-1 block text-sm font-medium text-body">Description (optional)</label>
+        <textarea {...register('description', { maxLength: 2000 })} rows={2} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2.5 text-sm text-heading placeholder-hint outline-none focus:border-line-focus" placeholder="Brief overview..." />
       </div>
       <div>
-        <h4 className="mb-2 text-sm font-semibold text-neutral-300">Tasks</h4>
+        <h4 className="mb-2 text-sm font-semibold text-body">Tasks</h4>
         <div className="space-y-3">
           {fields.map((field, idx) => (
-            <div key={field.id} className="rounded-xl border border-white/10 bg-white/5 p-4 border-l-4 border-l-blue-500/50">
+            <div key={field.id} className="rounded-xl border border-line bg-surface p-4 border-l-4 border-l-blue-500/50">
               <div className="mb-2 flex items-center justify-between">
-                <p className="text-xs font-semibold text-neutral-400">Step {idx + 1}</p>
+                <p className="text-xs font-semibold text-secondary">Step {idx + 1}</p>
                 {fields.length > 1 && (<button type="button" onClick={() => remove(idx)} className="rounded-md border border-red-500/40 p-1 text-red-300 hover:bg-red-500/10"><Trash2 size={14} /></button>)}
               </div>
               <div className="space-y-2">
-                <input {...register(`tasks.${idx}.title`, { required: true })} placeholder="Task title" className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 outline-none focus:border-white/30" />
-                <textarea {...register(`tasks.${idx}.description`)} placeholder="Description (optional)" rows={2} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 outline-none focus:border-white/30" />
+                <input {...register(`tasks.${idx}.title`, { required: true })} placeholder="Task title" className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading placeholder-hint outline-none focus:border-line-focus" />
+                <textarea {...register(`tasks.${idx}.description`)} placeholder="Description (optional)" rows={2} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading placeholder-hint outline-none focus:border-line-focus" />
                 <div className="grid grid-cols-2 gap-2">
-                  <div><label className="mb-1 block text-xs text-neutral-500">From</label><input type="date" {...register(`tasks.${idx}.fromDate`, { required: true })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-white/30" /></div>
-                  <div><label className="mb-1 block text-xs text-neutral-500">To</label><input type="date" {...register(`tasks.${idx}.toDate`, { required: true })} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-white/30" /></div>
+                  <div><label className="mb-1 block text-xs text-muted">From</label><input type="date" {...register(`tasks.${idx}.fromDate`, { required: true })} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading outline-none focus:border-line-focus" /></div>
+                  <div><label className="mb-1 block text-xs text-muted">To</label><input type="date" {...register(`tasks.${idx}.toDate`, { required: true })} className="w-full rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading outline-none focus:border-line-focus" /></div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <button type="button" onClick={() => append({ title: '', description: '', fromDate: '', toDate: '' })} className="mt-3 inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white hover:bg-white/10"><Plus size={16} /> Add Task</button>
+        <button type="button" onClick={() => append({ title: '', description: '', fromDate: '', toDate: '' })} className="mt-3 inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-heading hover:bg-surface-alt"><Plus size={16} /> Add Task</button>
       </div>
-      <button type="submit" disabled={isSubmitting} className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-neutral-900 hover:bg-neutral-200 disabled:opacity-60 transition">{isSubmitting ? 'Uploading...' : 'Upload Schedule'}</button>
+      <button type="submit" disabled={isSubmitting} className="w-full rounded-lg bg-btn py-2.5 text-sm font-semibold text-ink hover:bg-btn-hover disabled:opacity-60 transition">{isSubmitting ? 'Uploading...' : 'Upload Schedule'}</button>
     </form>
   )
 }

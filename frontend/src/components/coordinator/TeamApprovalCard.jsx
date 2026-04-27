@@ -45,12 +45,12 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
   }
 
   return (
-    <div className={`rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm border-l-4 ${borderLeftColor[team.status] || borderLeftColor.pending}`}>
+    <div className={`rounded-2xl border border-line bg-surface p-5 backdrop-blur-sm border-l-4 ${borderLeftColor[team.status] || borderLeftColor.pending}`}>
       {/* Header */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-3">
-          <h3 className="font-mono text-lg font-bold text-white">{team.teamId}</h3>
-          <span className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${categoryColors[team.category] || 'bg-white/10 text-neutral-300'}`}>
+          <h3 className="font-mono text-lg font-bold text-heading">{team.teamId}</h3>
+          <span className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${categoryColors[team.category] || 'bg-surface-alt text-body'}`}>
             {team.category}
           </span>
         </div>
@@ -58,44 +58,44 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
           <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${statusColors[team.status] || statusColors.pending}`}>
             {team.status}
           </span>
-          <span className="text-xs text-neutral-500">
+          <span className="text-xs text-muted">
             {new Date(team.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
           </span>
         </div>
       </div>
 
       {/* Info rows */}
-      <div className="mb-3 space-y-1 text-sm text-neutral-300">
+      <div className="mb-3 space-y-1 text-sm text-body">
         <p>
-          <span className="text-neutral-500">Team Leader:</span>{' '}
+          <span className="text-muted">Team Leader:</span>{' '}
           <span className="font-medium">{team.teamLeaderId?.name}</span>{' '}
-          <span className="text-xs text-neutral-500">({team.teamLeaderId?.email})</span>
+          <span className="text-xs text-muted">({team.teamLeaderId?.email})</span>
           {team.teamLeaderId?.rollNo && (
-            <span className="ml-1 text-xs text-neutral-500">Roll: {team.teamLeaderId.rollNo}</span>
+            <span className="ml-1 text-xs text-muted">Roll: {team.teamLeaderId.rollNo}</span>
           )}
         </p>
         <p>
-          <span className="text-neutral-500">Department:</span> {team.branch}
-          <span className="mx-2 text-neutral-600">|</span>
-          <span className="text-neutral-500">Academic Year:</span> {team.academicYear}
+          <span className="text-muted">Department:</span> {team.branch}
+          <span className="mx-2 text-faint">|</span>
+          <span className="text-muted">Academic Year:</span> {team.academicYear}
         </p>
       </div>
 
       {/* Members table */}
-      <div className="mb-4 overflow-hidden rounded-xl border border-white/10">
+      <div className="mb-4 overflow-hidden rounded-xl border border-line">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-white/10 bg-white/5">
-            <tr className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <thead className="border-b border-line bg-surface-alt">
+            <tr className="text-xs font-semibold uppercase tracking-wide text-muted">
               <th className="px-3 py-2">#</th>
               <th className="px-3 py-2">Name</th>
               <th className="px-3 py-2">Roll No</th>
               <th className="px-3 py-2">Branch</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/10">
+          <tbody className="divide-y divide-line">
             {(team.members || []).map((m, i) => (
-              <tr key={m.rollNo || i} className="text-neutral-300">
-                <td className="px-3 py-2 text-neutral-500">{i + 1}</td>
+              <tr key={m.rollNo || i} className="text-body">
+                <td className="px-3 py-2 text-muted">{i + 1}</td>
                 <td className="px-3 py-2">{m.name}</td>
                 <td className="px-3 py-2 font-mono text-xs">{m.rollNo}</td>
                 <td className="px-3 py-2 text-xs">{m.branch}</td>
@@ -109,17 +109,17 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
       {team.status === 'pending' && (
         <div className="space-y-4">
           {/* Approve section */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="mb-2 text-sm font-semibold text-neutral-300">Assign Mentor & Approve</p>
+          <div className="rounded-xl border border-line bg-surface p-4">
+            <p className="mb-2 text-sm font-semibold text-body">Assign Mentor & Approve</p>
             <div className="flex gap-2">
               <select
                 value={selectedMentorId}
                 onChange={(e) => setSelectedMentorId(e.target.value)}
-                className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-white/30"
+                className="flex-1 rounded-lg border border-line bg-input-bg px-3 py-2 text-sm text-heading outline-none focus:border-line-focus"
               >
-                <option value="" className="bg-neutral-900">-- Select a Mentor --</option>
+                <option value="" className="bg-option">-- Select a Mentor --</option>
                 {(mentors || []).map((m) => (
-                  <option key={m._id} value={m._id} className="bg-neutral-900">
+                  <option key={m._id} value={m._id} className="bg-option">
                     {m.name} ({m.email})
                   </option>
                 ))}
@@ -137,9 +137,9 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/10" />
-            <span className="text-xs text-neutral-500">or</span>
-            <div className="h-px flex-1 bg-white/10" />
+            <div className="h-px flex-1 bg-line" />
+            <span className="text-xs text-muted">or</span>
+            <div className="h-px flex-1 bg-line" />
           </div>
 
           {/* Reject section */}
@@ -158,7 +158,7 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
                 onChange={(e) => setRejectionReason(e.target.value)}
                 rows={3}
                 placeholder="Reason for rejection (minimum 10 characters)..."
-                className="mb-2 w-full rounded-lg border border-red-500/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-neutral-500 outline-none focus:border-red-500/40"
+                className="mb-2 w-full rounded-lg border border-red-500/20 bg-input-bg px-3 py-2 text-sm text-heading placeholder-hint outline-none focus:border-red-500/40"
               />
               <div className="flex items-center gap-2">
                 <button
@@ -175,7 +175,7 @@ function TeamApprovalCard({ team, mentors, onApprove, onReject }) {
                     setShowRejectForm(false)
                     setRejectionReason('')
                   }}
-                  className="text-sm text-neutral-400 hover:text-white transition"
+                  className="text-sm text-secondary hover:text-heading transition"
                 >
                   Cancel
                 </button>
